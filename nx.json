@@ -1,0 +1,40 @@
+{
+  "npmScope": "f1-dashboard",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "tslint.json": "*",
+    ".eslintrc.json": "*",
+    "nx.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "projects": {
+    "f1-dashboard": {
+      "tags": []
+    },
+    "f1-dashboard-e2e": {
+      "tags": [],
+      "implicitDependencies": ["f1-dashboard"]
+    },
+    "api": {
+      "tags": []
+    },
+    "api-interfaces": {
+      "tags": []
+    }
+  }
+}

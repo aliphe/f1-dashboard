@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "projects": {
+    "f1-dashboard": {
+      "root": "apps/f1-dashboard",
+      "sourceRoot": "apps/f1-dashboard/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:build",
+          "options": {
+            "outputPath": "dist/apps/f1-dashboard",
+            "index": "apps/f1-dashboard/src/index.html",
+            "main": "apps/f1-dashboard/src/main.tsx",
+            "polyfills": "apps/f1-dashboard/src/polyfills.ts",
+            "tsConfig": "apps/f1-dashboard/tsconfig.app.json",
+            "assets": [
+              "apps/f1-dashboard/src/favicon.ico",
+              "apps/f1-dashboard/src/assets"
+            ],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/f1-dashboard/src/environments/environment.ts",
+                  "with": "apps/f1-dashboard/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "f1-dashboard:build",
+            "proxyConfig": "apps/f1-dashboard/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "f1-dashboard:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/f1-dashboard/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/f1-dashboard/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "f1-dashboard-e2e": {
+      "root": "apps/f1-dashboard-e2e",
+      "sourceRoot": "apps/f1-dashboard-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/f1-dashboard-e2e/cypress.json",
+            "tsConfig": "apps/f1-dashboard-e2e/tsconfig.e2e.json",
+            "devServerTarget": "f1-dashboard:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "f1-dashboard:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/f1-dashboard-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "prefix": "api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "assets": ["apps/api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-interfaces": {
+      "root": "libs/api-interfaces",
+      "sourceRoot": "libs/api-interfaces/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api-interfaces/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "schematics": {
+    "@nrwl/react": {
+      "application": {
+        "style": "styled-components",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "styled-components"
+      },
+      "library": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "f1-dashboard"
+}
