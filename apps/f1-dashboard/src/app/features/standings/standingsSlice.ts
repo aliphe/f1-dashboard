@@ -11,6 +11,8 @@ export interface StandingsState {
   constructors: ConstructorStanding[];
 
   isLoading: boolean;
+
+  isFetched: boolean;
 }
 
 const initialState: StandingsState = {
@@ -19,6 +21,8 @@ const initialState: StandingsState = {
   constructors: [],
 
   isLoading: false,
+
+  isFetched: false,
 };
 
 export const fetchDriverStandingsByYear = createAsyncThunk(
@@ -45,23 +49,30 @@ const standingsReducer = createSlice({
     builder.addCase(fetchDriverStandingsByYear.fulfilled, (state, action) => {
       state.drivers.push(...action.payload.data.driverStandings);
       state.isLoading = false;
+      state.isFetched= true;
     });
     builder.addCase(fetchDriverStandingsByYear.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(fetchDriverStandingsByYear.rejected, (state) => {
       state.isLoading = false;
+      state.isFetched= true;
     });
 
-    builder.addCase(fetchConstructorStandingsByYear.fulfilled, (state, action) => {
-      state.constructors.push(...action.payload.data.constructorStandings);
-      state.isLoading = false;
-    });
+    builder.addCase(
+      fetchConstructorStandingsByYear.fulfilled,
+      (state, action) => {
+        state.constructors.push(...action.payload.data.constructorStandings);
+        state.isLoading = false;
+      state.isFetched= true;
+      }
+    );
     builder.addCase(fetchConstructorStandingsByYear.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(fetchConstructorStandingsByYear.rejected, (state) => {
       state.isLoading = false;
+      state.isFetched= true;
     });
   },
 });

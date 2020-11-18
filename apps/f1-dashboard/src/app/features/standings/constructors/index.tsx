@@ -1,32 +1,49 @@
-import { ConstructorStanding} from '@f1-dashboard/api-interfaces';
+import { ConstructorStanding } from '@f1-dashboard/api-interfaces';
+import {
+  Paper,
+  Typography,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from '@material-ui/core';
 import React from 'react';
-import styled from 'styled-components';
-import { Card } from '../../../components/basics/card';
-import { SectionName } from '../../../components/basics/Section';
 
-const List = styled.div`
-  background-color: #f0f0f0;
-  width: 500px;
-`;
-
-interface Props  {
+interface Props {
   constructorStandings: ConstructorStanding[];
 }
 
 const ConstructorStandings: React.FC<Props> = (props: Props) => {
-  const {constructorStandings} = props;
+  const { constructorStandings } = props;
+
   return (
-    <Card>
-      <SectionName>Constructors Standings</SectionName>
-      <List>
-        {constructorStandings.map((c: ConstructorStanding) => (
-          <div>
-            <div>{c.position}</div>
-            <div>{c.points}</div>
-          </div>
-        ))}
-      </List>
-    </Card>
+    <Paper>
+      <Typography variant="h6" component="div">
+        Constructors
+      </Typography>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Position</TableCell>
+              <TableCell>Constructor</TableCell>
+              <TableCell>Points</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {constructorStandings.map((c: ConstructorStanding) => (
+              <TableRow key={c.position}>
+                <TableCell>{c.position}</TableCell>
+                <TableCell>{c.Constructor.name}</TableCell>
+                <TableCell>{c.points}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 };
 
