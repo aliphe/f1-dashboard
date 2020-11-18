@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Card } from '../../components/basics/card';
+import { SectionName } from '../../components/basics/Section';
 import { RootState } from '../../store';
 import DriverCard from './driverCard';
 import { fetchDriversByYear } from './driversSlice';
@@ -10,8 +11,6 @@ const List = styled.div`
   background-color: #f0f0f0;
   width: 500px;
 `;
-
-const SectionName = styled.h1``;
 
 const DriversList: React.FC = () => {
   const dispatch = useDispatch();
