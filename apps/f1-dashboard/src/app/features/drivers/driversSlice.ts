@@ -39,7 +39,7 @@ const driversReducer = createSlice({
         state.isLoading = false;
       });
     });
-    builder.addCase(fetchDriversByYear.pending, (state, action) => {
+    builder.addCase(fetchDriversByYear.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(fetchDriversByYear.rejected, (state) => {
