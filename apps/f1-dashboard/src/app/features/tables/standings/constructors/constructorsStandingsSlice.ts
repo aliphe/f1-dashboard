@@ -1,6 +1,4 @@
-import {
-  ConstructorStanding,
-} from '@f1-dashboard/api-interfaces';
+import { ConstructorStanding } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import StandingsAPI from '../standingsApi';
 
