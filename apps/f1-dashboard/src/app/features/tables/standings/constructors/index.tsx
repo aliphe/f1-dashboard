@@ -9,15 +9,26 @@ import {
   TableCell,
   TableBody,
 } from '@material-ui/core';
-import React from 'react';
+import { RootState } from '../../../../store';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchConstructorsStandingsByYear } from './constructorsStandingsSlice';
 
-interface Props {
-  constructorStandings: ConstructorStanding[];
-}
+const ConstructorsStandings: React.FC = () => {
+  const dispatch = useDispatch();
+  const { isLoading, isFetched, constructors } = useSelector(
+    (state: RootState) => state.constructorsStandings
+  );
 
-const ConstructorStandings: React.FC<Props> = (props: Props) => {
-  const { constructorStandings } = props;
+  useEffect(() => {
+    if (!isLoading && !isFetched) {
+      dispatch(fetchConstructorsStandingsByYear(2020));
+    }
+  }, [dispatch, isLoading, isFetched]);
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <Paper>
       <Typography variant="h6" component="div">
@@ -33,7 +44,7 @@ const ConstructorStandings: React.FC<Props> = (props: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {constructorStandings.map((c: ConstructorStanding) => (
+            {constructors.map((c: ConstructorStanding) => (
               <TableRow key={c.position}>
                 <TableCell>{c.position}</TableCell>
                 <TableCell>{c.Constructor.name}</TableCell>
@@ -47,4 +58,4 @@ const ConstructorStandings: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default ConstructorStandings;
+export default ConstructorsStandings;

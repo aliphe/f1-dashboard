@@ -6,7 +6,7 @@ import {
 import axios from 'axios';
 
 export default class StandingsAPI {
-  static async fetchDriverStandingsByYear(year: number) {
+  static async fetchDriversStandingsByYear(year: number) {
     const res = await axios.get<
       Response<{ driverStandings: DriverStanding[] }>
     >(`/api/standings/drivers?year=${year}`);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DriverStanding } from '@f1-dashboard/api-interfaces';
 import {
   Paper,
@@ -10,13 +10,25 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchDriverStandingsByYear } from './driverStandingsSlice';
+import { RootState } from '../../../../store';
 
-interface Props {
-  driverStandings: DriverStanding[];
-}
+const DriverStandings: React.FC = () => {
+  const dispatch = useDispatch();
+  const { isLoading, isFetched, drivers } = useSelector(
+    (state: RootState) => state.driversStandings
+  );
 
-const DriverStandings: React.FC<Props> = (props: Props) => {
-  const { driverStandings } = props;
+  useEffect(() => {
+    if (!isLoading && !isFetched) {
+      dispatch(fetchDriverStandingsByYear(2020));
+    }
+  }, [dispatch, isLoading, isFetched]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <Paper>
       <Typography variant="h6" component="div">
@@ -32,7 +44,7 @@ const DriverStandings: React.FC<Props> = (props: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {driverStandings.map((d: DriverStanding) => (
+            {drivers.map((d: DriverStanding) => (
               <TableRow key={d.position}>
                 <TableCell>{d.position}</TableCell>
                 <TableCell>{d.Driver.familyName}</TableCell>

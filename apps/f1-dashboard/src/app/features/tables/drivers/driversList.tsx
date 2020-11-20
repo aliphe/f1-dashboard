@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TableContainer from '@material-ui/core/TableContainer';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 import { fetchDriversByYear } from './driversSlice';
 import {
   Paper,

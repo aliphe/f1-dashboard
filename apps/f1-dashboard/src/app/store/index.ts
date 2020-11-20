@@ -1,20 +1,24 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import driversReducer, { DriversState } from '../features/drivers/driversSlice';
-import standingsReducer, {
-  StandingsState,
-} from '../features/standings/standingsSlice';
+import driversReducer, { DriversState } from '../features/tables/drivers/driversSlice';
+import navigationReducer, { NavigationState } from '../features/navigation/navigationSlice';
+import driversStandingsReducer, { DriversStandingsState } from '../features/tables/standings/drivers/driverStandingsSlice';
+import constructorStandingsReducer, { ConstructorsStandingsState } from '../features/tables/standings/constructors/constructorsStandingsSlice';
 
 const store = configureStore({
   reducer: {
     drivers: driversReducer,
-    standings: standingsReducer,
+    driversStandings: driversStandingsReducer,
+    constructorsStandings: constructorStandingsReducer,
+    navigation: navigationReducer,
   },
 });
 
 export type RootState = {
   drivers: DriversState;
-  standings: StandingsState;
+  driversStandings: DriversStandingsState;
+  constructorsStandings: ConstructorsStandingsState;
+  navigation: NavigationState;
 };
 
 export default store;
