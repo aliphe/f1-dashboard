@@ -1,22 +1,22 @@
+import { Grid } from '@material-ui/core';
 import React from 'react';
-import styled from 'styled-components';
-import { SectionName } from './components/basics/Section';
-import DriversList from './features/drivers/driversList';
-import Standings from './features/standings';
-
-const MainDisplay = styled.div`
-  display: flex;
-`;
+import Header from './components/Header';
+import Navigation from './features/navigation';
+import Tables from './features/tables';
 
 export const App = () => {
   return (
-    <>
-      <SectionName>Welcome to f1-dashboard!</SectionName>
-      <MainDisplay>
-        <DriversList />
-        <Standings />
-      </MainDisplay>
-    </>
+    <div>
+      <Header />
+      <Grid container spacing={2}>
+        <Grid item>
+          <Navigation />
+        </Grid>
+        <Grid item>
+          <Tables />
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 
