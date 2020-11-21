@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Driver {
+  id              String   @id
+  code            String?
+  givenName       String
+  familyName      String
+  permanentNumber Int?
+  dateOfBirth     DateTime
+  url             String
+  nationality     String
+  seasons         Season[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Constructor {
+  id          String   @id
+  season      Int
+  name        String
+  nationality String
+  url         String
+  seasons     Season[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DriverStanding {
+  position Int    @id
+  points   Int
+  wins     Int
+  driverId String
+
+  seasonYear Int
+  season     Season @relation(fields: [seasonYear], references: [year])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+model ConstructorStanding {
+  position Int @id
+  points   Int
+  wins     Int
+
+  season     Season @relation(fields: [seasonYear], references: [year])
+  seasonYear Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Season {
+  year                Int                   @id
+  Driver              Driver?               @relation(fields: [driverId], references: [id])
+  driverId            String?
+  Constructor         Constructor?          @relation(fields: [constructorId], references: [id])
+  constructorId       String?
+  DriverStanding      DriverStanding[]
+  ConstructorStanding ConstructorStanding[]
+}

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { NavigationChoice } from '../navigation/navigationSlice';
 import DriversList from './drivers/driversList';
-import ConstructorsStandings from './standings/constructors';
+import TeamsStandings from './standings/teams';
 import DriverStandings from './standings/drivers';
 
 const Tables: React.FC = () => {
@@ -16,8 +16,8 @@ const Tables: React.FC = () => {
       {focusedNavigation === NavigationChoice.DRIVERS_STANDINGS && (
         <DriverStandings />
       )}
-      {focusedNavigation === NavigationChoice.CONSTRUCTORS_STANDINGS && (
-        <ConstructorsStandings />
+      {focusedNavigation === NavigationChoice.TEAMS_STANDINGS && (
+        <TeamsStandings />
       )}
     </div>
   );

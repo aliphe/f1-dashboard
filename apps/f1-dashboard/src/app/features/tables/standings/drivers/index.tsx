@@ -47,7 +47,7 @@ const DriverStandings: React.FC = () => {
             {drivers.map((d: DriverStanding) => (
               <TableRow key={d.position}>
                 <TableCell>{d.position}</TableCell>
-                <TableCell>{d.Driver.familyName}</TableCell>
+                <TableCell>{d.driver.familyName}</TableCell>
                 <TableCell>{d.points}</TableCell>
               </TableRow>
             ))}

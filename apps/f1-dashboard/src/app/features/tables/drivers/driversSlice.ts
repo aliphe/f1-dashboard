@@ -34,8 +34,8 @@ const driversReducer = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchDriversByYear.fulfilled, (state, action) => {
       action.payload.data.drivers.forEach((d: Driver) => {
-        state.allIds.push(d.driverId);
-        state.byId[d.driverId] = d;
+        state.allIds.push(d.id);
+        state.byId[d.id] = d;
         state.isLoading = false;
       });
     });

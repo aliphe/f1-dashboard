@@ -1,0 +1,7 @@
+# Prisma Migrate lockfile v1
+
+20201121211243-add-basic-entities
+20201121212407-standings-relations
+20201121220811-fix-driver
+20201122091136-rename-constructor-team
+20201122093756-remove-team-season
