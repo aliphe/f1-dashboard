@@ -1,7 +1,7 @@
 import {
   Response,
   DriverStanding,
-  ConstructorStanding,
+  TeamStanding,
 } from '@f1-dashboard/api-interfaces';
 import axios from 'axios';
 
@@ -13,10 +13,10 @@ export default class StandingsAPI {
     return res;
   }
 
-  static async fetchConstructorsStandingsByYear(year: number) {
-    const res = await axios.get<
-      Response<{ constructorStandings: ConstructorStanding[] }>
-    >(`/api/standings/constructors?year=${year}`);
+  static async fetchTeamsStandingsByYear(year: number) {
+    const res = await axios.get<Response<{ teamStandings: TeamStanding[] }>>(
+      `/api/standings/teams?year=${year}`
+    );
     return res;
   }
 }

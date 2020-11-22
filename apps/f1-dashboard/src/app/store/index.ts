@@ -9,15 +9,15 @@ import navigationReducer, {
 import driversStandingsReducer, {
   DriversStandingsState,
 } from '../features/tables/standings/drivers/driverStandingsSlice';
-import constructorStandingsReducer, {
-  ConstructorsStandingsState,
-} from '../features/tables/standings/constructors/constructorsStandingsSlice';
+import teamStandingsReducer, {
+  TeamsStandingsState,
+} from '../features/tables/standings/teams/teamsStandingsSlice';
 
 const store = configureStore({
   reducer: {
     drivers: driversReducer,
     driversStandings: driversStandingsReducer,
-    constructorsStandings: constructorStandingsReducer,
+    teamsStandings: teamStandingsReducer,
     navigation: navigationReducer,
   },
 });
@@ -25,7 +25,7 @@ const store = configureStore({
 export type RootState = {
   drivers: DriversState;
   driversStandings: DriversStandingsState;
-  constructorsStandings: ConstructorsStandingsState;
+  teamsStandings: TeamsStandingsState;
   navigation: NavigationState;
 };
 

@@ -1,0 +1,118 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "Driver",
+      "field": "DriverStanding",
+      "type": "DriverStanding",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Constructor",
+      "field": "ConstructorStanding",
+      "type": "ConstructorStanding",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "DriverStanding",
+      "field": "driver",
+      "type": "Driver",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "DriverStanding",
+          "field": "driver"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "DriverStanding",
+          "field": "driver"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[driverId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "DriverStanding",
+          "field": "driver"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConstructorStanding",
+      "field": "constructor",
+      "type": "Constructor",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "ConstructorStanding",
+          "field": "constructor"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "ConstructorStanding",
+          "field": "constructor"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[constructorId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "ConstructorStanding",
+          "field": "constructor"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConstructorStanding",
+      "field": "constructorId",
+      "type": "String",
+      "arity": "Required"
+    }
+  ]
+}

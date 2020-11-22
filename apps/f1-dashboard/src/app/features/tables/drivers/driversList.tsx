@@ -49,7 +49,7 @@ const DriversList: React.FC = () => {
 
           <TableBody>
             {drivers.map((driver) => (
-              <TableRow key={driver.driverId}>
+              <TableRow key={driver.id}>
                 <TableCell>{driver.familyName}</TableCell>
                 <TableCell>{driver.permanentNumber}</TableCell>
                 <TableCell>{driver.nationality}</TableCell>

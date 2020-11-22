@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export enum NavigationChoice {
   DRIVERS_LIST = 'Drivers List',
   DRIVERS_STANDINGS = 'Drivers Standings',
-  CONSTRUCTORS_STANDINGS = 'Constructors Standings',
+  TEAMS_STANDINGS = 'Teams Standings',
 }
 
 export interface NavigationState {

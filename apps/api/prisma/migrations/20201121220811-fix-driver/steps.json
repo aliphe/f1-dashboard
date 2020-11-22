@@ -1,0 +1,63 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "Season",
+      "field": "drivers",
+      "type": "Driver",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Season",
+      "field": "constructors",
+      "type": "Constructor",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Season",
+      "field": "driverStandings",
+      "type": "DriverStanding",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Season",
+      "field": "constructorStandings",
+      "type": "ConstructorStanding",
+      "arity": "List"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Season",
+      "field": "Driver"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Season",
+      "field": "driverId"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Season",
+      "field": "Constructor"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Season",
+      "field": "constructorId"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Season",
+      "field": "DriverStanding"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "Season",
+      "field": "ConstructorStanding"
+    }
+  ]
+}

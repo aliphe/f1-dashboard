@@ -1,29 +1,31 @@
-export interface Constructor {
-  constructorId: string;
+export interface Team {
+  id: string;
+  url: string;
   name: string;
   nationality: string;
 }
 
 export interface Driver {
-  driverId: string;
+  id: string;
   permanentNumber: number;
+  code: string;
+  url: string;
   givenName: string;
   familyName: string;
-  dateOfBirth: string; // YYYY-MM-DD
+  dateOfBirth: string; // ISO
   nationality: string;
 }
 
-export interface ConstructorStanding {
+export interface TeamStanding {
   position: number;
   points: number;
   wins: number;
-  Constructor: Constructor;
+  team: Team;
 }
 
 export interface DriverStanding {
   position: number;
   points: number;
   wins: number;
-  Driver: Driver;
-  Constructors: Constructor[];
+  driver: Driver;
 }

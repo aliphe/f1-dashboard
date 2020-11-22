@@ -1,12 +1,24 @@
+import { PrismaClient } from '@prisma/client';
 import express from 'express';
+import TeamStandingRepository from '../repositories/constructorStanding.repository';
+import DriverRepository from '../repositories/driver.repository';
+import DriverStandingRepository from '../repositories/driverStanding.repository';
 import FormulaOneService from '../services/formulaOne.service';
 import createDriversRouter from './drivers';
 import createStandingsRouter from './standings';
 
-export default function createRouter() {
+export default function createRouter(prisma: PrismaClient) {
   const app = express();
 
-  const formulaOneService = new FormulaOneService();
+  const driverRepository = new DriverRepository(prisma);
+  const driverStandingRepository = new DriverStandingRepository(prisma);
+  const teamStandingRepository = new TeamStandingRepository(prisma);
+  const formulaOneService = new FormulaOneService(
+    prisma,
+    driverRepository,
+    driverStandingRepository,
+    teamStandingRepository
+  );
 
   app.use('/drivers', createDriversRouter(formulaOneService));
   app.use('/standings', createStandingsRouter(formulaOneService));

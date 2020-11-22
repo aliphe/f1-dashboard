@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import FormulaOneService from '../../services/formulaOne.service';
-import createConstructorStandingsRouter from './constructors';
+import createTeamStandingsRouter from './teams';
 import createDriverStandingsRouter from './drivers';
 
 export default function createStandingsRouter(
@@ -9,10 +9,7 @@ export default function createStandingsRouter(
   const router = Router();
 
   router.use('/drivers', createDriverStandingsRouter(formulaOneService));
-  router.use(
-    '/constructors',
-    createConstructorStandingsRouter(formulaOneService)
-  );
+  router.use('/teams', createTeamStandingsRouter(formulaOneService));
 
   return router;
 }

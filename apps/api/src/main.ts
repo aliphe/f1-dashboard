@@ -1,9 +1,12 @@
+import { PrismaClient } from '@prisma/client';
 import * as express from 'express';
 import createRouter from './app/routes';
 
 const app = express();
 
-app.use('/api/', createRouter());
+const prisma = new PrismaClient();
+
+app.use('/api/', createRouter(prisma));
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {
