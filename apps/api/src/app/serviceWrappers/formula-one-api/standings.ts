@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { RequestResponse } from '.';
-import {
-  Team,
-  TeamStanding,
-  Driver,
-  DriverStanding,
-} from '@f1-dashboard/api-interfaces';
+import { TeamStanding, DriverStanding } from '@f1-dashboard/api-interfaces';
 
 import { environment } from '../../../environments/environment';
 
@@ -61,12 +56,10 @@ export type TeamStandingsRequestResponse = RequestResponse<{
   };
 }>;
 
-export default class StandingsWrapper {
-  static async fetchDriverStandings(year?: number): Promise<DriverStanding[]> {
+export default class StandingsServiceWrapper {
+  static async fetchDriverStandings(year: number): Promise<DriverStanding[]> {
     const res = await axios.get<DriverStandingsRequestResponse>(
-      `${environment.apis.ergast.url}/f1${
-        year ? '/' + year : ''
-      }/driverstandings.json`
+      `${environment.apis.ergast.url}/f1/${year}/driverstandings.json`
     );
     return res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings.map(
       (s) => ({
@@ -87,11 +80,9 @@ export default class StandingsWrapper {
     );
   }
 
-  static async fetchTeamStandings(year?: number): Promise<TeamStanding[]> {
+  static async fetchTeamStandings(year: number): Promise<TeamStanding[]> {
     const res = await axios.get<TeamStandingsRequestResponse>(
-      `${environment.apis.ergast.url}/f1${
-        year ? '/' + year : ''
-      }/constructorstandings.json`
+      `${environment.apis.ergast.url}/f1/${year}/constructorstandings.json`
     );
     return res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings.map(
       (s) => ({

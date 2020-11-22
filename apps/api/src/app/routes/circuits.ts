@@ -2,7 +2,7 @@ import { Router } from 'express';
 import AsyncHandler from 'express-async-handler';
 import FormulaOneService from '../services/formulaOne.service';
 
-export default function createDriversRouter(
+export default function createCircuitsRouter(
   formulaOneService: FormulaOneService
 ) {
   const router = Router();
@@ -10,17 +10,15 @@ export default function createDriversRouter(
   router.get(
     '/',
     AsyncHandler(async (req, res) => {
-      const { year } = req.query;
+      const circuits = await formulaOneService.fetchCircuits();
 
-      const drivers = await formulaOneService.fetchDrivers(Number(year));
       return res.json({
-        message: 'Drivers fetched successfully',
+        message: 'Circuits fetched successfully',
         data: {
-          drivers,
+          circuits,
         },
       });
     })
   );
-
   return router;
 }

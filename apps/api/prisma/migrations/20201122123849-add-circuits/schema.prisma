@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -27,15 +27,15 @@ model Driver {
 }
 
 model Team {
-  id           String         @id
-  name         String
-  nationality  String
-  url          String
-  seasons      Season[]
-  TeamStanding TeamStanding[]
+  id          String   @id
+  name        String
+  nationality String
+  url         String
+  seasons     Season[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  TeamStanding TeamStanding[]
 }
 
 model Circuit {
@@ -44,9 +44,6 @@ model Circuit {
   name    String
   city    String
   country String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model DriverStanding {
