@@ -16,6 +16,22 @@ export interface Driver {
   nationality: string;
 }
 
+export interface Circuit {
+  id: string;
+  url: string;
+  name: string;
+  city: string;
+  country: string;
+}
+
+export interface Race {
+  round: number;
+  name: string;
+  circuit: Circuit;
+  date: string;
+  url: string;
+}
+
 export interface TeamStanding {
   position: number;
   points: number;

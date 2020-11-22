@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import React from 'react';
 import Header from './components/Header';
 import Navigation from './features/navigation';
-import Tables from './features/tables';
+import Features from './features';
 
 export const App = () => {
   return (
@@ -13,7 +13,7 @@ export const App = () => {
           <Navigation />
         </Grid>
         <Grid item>
-          <Tables />
+          <Features />
         </Grid>
       </Grid>
     </div>

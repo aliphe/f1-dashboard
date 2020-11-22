@@ -20,8 +20,8 @@ export type DriversRequestResponse = RequestResponse<{
   };
 }>;
 
-export default class DriversWrapper {
-  static async fetchDrivers(year?: number): Promise<Driver[]> {
+export default class DriversServiceWrapper {
+  static async fetchDrivers(year: number): Promise<Driver[]> {
     const res = await axios.get<DriversRequestResponse>(
       `${environment.apis.ergast.url}/f1${year ? '/' + year : ''}/drivers.json`
     );

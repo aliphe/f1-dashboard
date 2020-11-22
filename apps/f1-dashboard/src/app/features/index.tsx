@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { NavigationChoice } from '../navigation/navigationSlice';
+import { RootState } from '../store';
+import { NavigationChoice } from './navigation/navigationSlice';
 import DriversList from './drivers/driversList';
 import TeamsStandings from './standings/teams';
 import DriverStandings from './standings/drivers';
+import CircuitList from './circuits/circuitsList';
 
 const Tables: React.FC = () => {
   const focusedNavigation = useSelector(
@@ -19,6 +20,7 @@ const Tables: React.FC = () => {
       {focusedNavigation === NavigationChoice.TEAMS_STANDINGS && (
         <TeamsStandings />
       )}
+      {focusedNavigation === NavigationChoice.CIRCUITS_LIST && <CircuitList />}
     </div>
   );
 };
