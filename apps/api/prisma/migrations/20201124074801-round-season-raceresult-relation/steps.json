@@ -1,0 +1,89 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteField",
+      "model": "Race",
+      "field": "id"
+    },
+    {
+      "tag": "CreateField",
+      "model": "RaceResult",
+      "field": "raceRound",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "RaceResult",
+      "field": "raceSeasonYear",
+      "type": "Int",
+      "arity": "Required"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "RaceResult",
+      "field": "raceId"
+    },
+    {
+      "tag": "UpdateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "RaceResult",
+          "field": "race"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "newValue": "[raceRound, raceSeasonYear]"
+    },
+    {
+      "tag": "UpdateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "RaceResult",
+          "field": "race"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "newValue": "[round, seasonYear]"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "RaceResult",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[position, raceRound, raceSeasonYear]"
+            }
+          ]
+        },
+        "directive": "unique"
+      }
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "RaceResult",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[position, raceId]"
+            }
+          ]
+        },
+        "directive": "unique"
+      }
+    }
+  ]
+}

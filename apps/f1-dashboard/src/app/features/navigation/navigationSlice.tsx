@@ -5,6 +5,7 @@ export enum NavigationChoice {
   DRIVERS_STANDINGS = 'Drivers Standings',
   TEAMS_STANDINGS = 'Teams Standings',
   CIRCUITS_LIST = 'Circuits',
+  RACES_LIST = 'Races',
 }
 
 export interface NavigationState {

@@ -60,5 +60,3 @@ migration 20201122123849-add-circuits..20201122125756-create-at-updated-at-circu
  model DriverStanding {
    position Int @id
 ```
-
-

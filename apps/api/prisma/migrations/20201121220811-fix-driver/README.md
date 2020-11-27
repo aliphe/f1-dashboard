@@ -83,5 +83,3 @@ migration 20201121212407-standings-relations..20201121220811-fix-driver
 +  constructorStandings ConstructorStanding[]
  }
 ```
-
-

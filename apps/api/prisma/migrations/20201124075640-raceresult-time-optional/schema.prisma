@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Driver {
+  id              String   @id
+  code            String?
+  givenName       String
+  familyName      String
+  permanentNumber Int?
+  dateOfBirth     DateTime
+  url             String
+  nationality     String
+  seasons         Season[]
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  DriverStanding DriverStanding[]
+  RaceResult     RaceResult[]
+}
+
+model Team {
+  id           String         @id
+  name         String
+  nationality  String
+  url          String
+  seasons      Season[]
+  TeamStanding TeamStanding[]
+
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  RaceResult RaceResult[]
+}
+
+model Circuit {
+  id      String @id
+  url     String
+  name    String
+  city    String
+  country String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Race      Race[]
+}
+
+model Race {
+  round      Int
+  seasonYear Int
+  name       String
+  season     Season       @relation(fields: [seasonYear], references: [year])
+  circuitId  String
+  circuit    Circuit      @relation(fields: [circuitId], references: [id])
+  date       DateTime
+  url        String
+  RaceResult RaceResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([round, seasonYear])
+}
+
+model RaceResult {
+  points   Int
+  position Int
+  grid     Int
+  laps     Int
+  time     String?
+  status   String
+
+  driver   Driver @relation(fields: [driverId], references: [id])
+  driverId String
+
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String
+
+  raceRound      Int
+  raceSeasonYear Int
+  race           Race @relation(fields: [raceRound, raceSeasonYear], references: [round, seasonYear])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([position, raceRound, raceSeasonYear])
+}
+
+model DriverStanding {
+  position Int @id
+  points   Int
+  wins     Int
+
+  season     Season @relation(fields: [seasonYear], references: [year])
+  seasonYear Int
+
+  driver   Driver @relation(fields: [driverId], references: [id])
+  driverId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+model TeamStanding {
+  position Int @id
+  points   Int
+  wins     Int
+
+  season     Season @relation(fields: [seasonYear], references: [year])
+  seasonYear Int
+
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Season {
+  year            Int              @id
+  drivers         Driver[]
+  teams           Team[]
+  driverStandings DriverStanding[]
+  teamStandings   TeamStanding[]
+  Race            Race[]
+}

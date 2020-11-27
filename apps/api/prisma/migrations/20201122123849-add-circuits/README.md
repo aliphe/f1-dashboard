@@ -50,5 +50,3 @@ migration 20201122093756-remove-team-season..20201122123849-add-circuits
    points   Int
    wins     Int
 ```
-
-

@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDriverStandingsByYear } from './driverStandingsSlice';
-import { RootState } from '../../../../store';
+import { RootState } from '../../../store';
 
 const DriverStandings: React.FC = () => {
   const dispatch = useDispatch();

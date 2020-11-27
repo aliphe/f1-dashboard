@@ -156,5 +156,3 @@ migration ..20201121211243-add-basic-entities
 +  ConstructorStanding ConstructorStanding[]
 +}
 ```
-
-

@@ -30,6 +30,18 @@ export interface Race {
   circuit: Circuit;
   date: string;
   url: string;
+  season: Season;
+}
+
+export interface RaceResult {
+  points: number;
+  position: number;
+  grid: number;
+  laps: number;
+  time?: string; // H:MM:SS.mmm
+  status: string;
+  team: Team;
+  driver: Driver;
 }
 
 export interface TeamStanding {
@@ -44,4 +56,8 @@ export interface DriverStanding {
   points: number;
   wins: number;
   driver: Driver;
+}
+
+export interface Season {
+  year: number;
 }
