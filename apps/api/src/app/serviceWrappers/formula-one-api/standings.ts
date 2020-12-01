@@ -1,19 +1,13 @@
 import axios from 'axios';
 import { RequestResponse } from '.';
-import { TeamStanding, DriverStanding } from '@f1-dashboard/api-interfaces';
+import {
+  TeamStanding,
+  DriverStanding,
+  Team,
+} from '@f1-dashboard/api-interfaces';
 
 import { environment } from '../../../environments/environment';
-
-type ApiDriver = {
-  driverId: string;
-  permanentNumber: number;
-  code: string;
-  url: string;
-  givenName: string;
-  familyName: string;
-  dateOfBirth: string; // ISO
-  nationality: string;
-};
+import DriversServiceWrapper, { ApiDriver } from './drivers';
 
 export interface ApiTeam {
   constructorId: string;
@@ -63,19 +57,10 @@ export default class StandingsServiceWrapper {
     );
     return res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings.map(
       (s) => ({
-        driver: {
-          id: s.Driver.driverId,
-          url: s.Driver.url,
-          code: s.Driver.code,
-          givenName: s.Driver.givenName,
-          familyName: s.Driver.familyName,
-          dateOfBirth: s.Driver.dateOfBirth,
-          nationality: s.Driver.nationality,
-          permanentNumber: s.Driver.permanentNumber,
-        },
         wins: Number(s.wins),
         points: Number(s.points),
         position: Number(s.position),
+        driver: DriversServiceWrapper.formatDriver(s.Driver),
       })
     );
   }
@@ -89,13 +74,17 @@ export default class StandingsServiceWrapper {
         position: Number(s.position),
         wins: Number(s.wins),
         points: Number(s.points),
-        team: {
-          id: s.Constructor.constructorId,
-          name: s.Constructor.name,
-          url: s.Constructor.url,
-          nationality: s.Constructor.nationality,
-        },
+        team: StandingsServiceWrapper.formatTeam(s.Constructor),
       })
     );
+  }
+
+  static formatTeam(team: ApiTeam): Team {
+    return {
+      id: team.constructorId,
+      name: team.name,
+      url: team.url,
+      nationality: team.nationality,
+    };
   }
 }

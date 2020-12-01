@@ -3,15 +3,19 @@ import {
   Driver,
   DriverStanding,
   Circuit,
+  Race,
 } from '@f1-dashboard/api-interfaces';
 import { PrismaClient } from '@prisma/client';
-import { isOlderThan } from '../helpers/time';
+import { isLastUpdateOlder, isOlderThan } from '../helpers/time';
 import CircuitRepository from '../repositories/circuit.repository';
 import TeamStandingRepository from '../repositories/constructorStanding.repository';
 import DriverRepository from '../repositories/driver.repository';
 import DriverStandingRepository from '../repositories/driverStanding.repository';
+import RaceRepository from '../repositories/race.repository';
+import RaceResultRepository from '../repositories/raceResult.repository';
 import CircuitsServiceWrapper from '../serviceWrappers/formula-one-api/circuits';
 import DriversServiceWrapper from '../serviceWrappers/formula-one-api/drivers';
+import RacesServiceWrapper from '../serviceWrappers/formula-one-api/races';
 import StandingsServiceWrapper from '../serviceWrappers/formula-one-api/standings';
 
 export default class FormulaOneService {
@@ -20,7 +24,9 @@ export default class FormulaOneService {
     private readonly driverRepository: DriverRepository,
     private readonly driverStandingRepository: DriverStandingRepository,
     private readonly teamStandingRepository: TeamStandingRepository,
-    private readonly circuitRepository: CircuitRepository
+    private readonly circuitRepository: CircuitRepository,
+    private readonly raceRepository: RaceRepository,
+    private readonly raceResultRepository: RaceResultRepository
   ) {}
 
   async fetchDrivers(season: number): Promise<Driver[]> {
@@ -33,10 +39,7 @@ export default class FormulaOneService {
         },
       },
     });
-    if (
-      !cachedDrivers.length ||
-      cachedDrivers.some((d) => isOlderThan(d.updatedAt, 7))
-    ) {
+    if (!cachedDrivers.length || isLastUpdateOlder(cachedDrivers, 7)) {
       const fetchedDrivers = await DriversServiceWrapper.fetchDrivers(season);
 
       await this.driverRepository.upsertBatch(fetchedDrivers, season);
@@ -62,7 +65,7 @@ export default class FormulaOneService {
     });
     if (
       !cachedDriversStandings.length ||
-      cachedDriversStandings.some((d) => isOlderThan(d.updatedAt, 7))
+      isLastUpdateOlder(cachedDriversStandings, 7)
     ) {
       const fetchedDriversStandings = await StandingsServiceWrapper.fetchDriverStandings(
         season
@@ -95,7 +98,7 @@ export default class FormulaOneService {
     });
     if (
       !cachedTeamsStandings.length ||
-      cachedTeamsStandings.some((d) => isOlderThan(d.updatedAt, 7))
+      isLastUpdateOlder(cachedTeamsStandings, 7)
     ) {
       const fetchedTeamsStandings = await StandingsServiceWrapper.fetchTeamStandings(
         season
@@ -111,15 +114,61 @@ export default class FormulaOneService {
 
   async fetchCircuits(): Promise<Circuit[]> {
     const cachedCircuits = await this.prisma.circuit.findMany();
-    if (
-      !cachedCircuits.length ||
-      cachedCircuits.some((c) => isOlderThan(c.updatedAt, 7))
-    ) {
+    if (!cachedCircuits.length || isLastUpdateOlder(cachedCircuits, 7)) {
       const fetchedCircuits = await CircuitsServiceWrapper.fetchCircuits();
 
       await this.circuitRepository.upsertBatch(fetchedCircuits);
       return fetchedCircuits;
     }
     return cachedCircuits;
+  }
+
+  async fetchRaces(season: number): Promise<Race[]> {
+    const cachedRaces = await this.prisma.race.findMany({
+      where: {
+        season: {
+          year: season,
+        },
+      },
+      include: {
+        circuit: true,
+        season: true,
+      },
+    });
+    if (!cachedRaces.length || isLastUpdateOlder(cachedRaces, 7)) {
+      const fetchedRaces = await RacesServiceWrapper.fetchRaces(season);
+      await this.raceRepository.upsertBatch(fetchedRaces, season);
+      return fetchedRaces;
+    }
+    return cachedRaces.map((r) => ({
+      ...r,
+      date: r.date.toISOString(),
+    }));
+  }
+
+  async fetchRaceResults(season: number, round: number) {
+    const cachedRaceResults = await this.prisma.raceResult.findMany({
+      where: {
+        race: {
+          seasonYear: season,
+          round: round,
+        },
+      },
+      include: {
+        driver: true,
+        team: true,
+      },
+    });
+
+    if (!cachedRaceResults.length || isLastUpdateOlder(cachedRaceResults, 7)) {
+      const { race, results } = await RacesServiceWrapper.fetchRaceResult(
+        season,
+        round
+      );
+
+      await this.raceResultRepository.upsertBatch(race, results);
+      return results;
+    }
+    return cachedRaceResults;
   }
 }

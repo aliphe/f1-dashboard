@@ -6,6 +6,7 @@ import DriversList from './drivers/driversList';
 import TeamsStandings from './standings/teams';
 import DriverStandings from './standings/drivers';
 import CircuitList from './circuits/circuitsList';
+import RaceList from './races/raceList';
 
 const Tables: React.FC = () => {
   const focusedNavigation = useSelector(
@@ -21,6 +22,7 @@ const Tables: React.FC = () => {
         <TeamsStandings />
       )}
       {focusedNavigation === NavigationChoice.CIRCUITS_LIST && <CircuitList />}
+      {focusedNavigation === NavigationChoice.RACES_LIST && <RaceList />}
     </div>
   );
 };

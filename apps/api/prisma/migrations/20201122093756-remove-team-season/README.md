@@ -35,5 +35,3 @@ migration 20201122091136-rename-constructor-team..20201122093756-remove-team-sea
    url         String
    seasons     Season[]
 ```
-
-

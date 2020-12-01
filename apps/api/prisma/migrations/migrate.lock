@@ -7,3 +7,9 @@
 20201122093756-remove-team-season
 20201122123849-add-circuits
 20201122125756-create-at-updated-at-circuit
+20201122165054-add-race
+20201122165746-add-name-race
+20201122182616-add-raceresults
+20201124071746-remove-raceresult-id
+20201124074801-round-season-raceresult-relation
+20201124075640-raceresult-time-optional

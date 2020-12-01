@@ -13,6 +13,7 @@ import driversStandingsReducer, {
 import teamStandingsReducer, {
   TeamsStandingsState,
 } from '../features/standings/teams/teamsStandingsSlice';
+import racesReducer, { RacesState } from '../features/races/racesSlice';
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     circuits: circuitsReducer,
     teamsStandings: teamStandingsReducer,
     navigation: navigationReducer,
+    races: racesReducer,
   },
 });
 
@@ -30,6 +32,7 @@ export type RootState = {
   teamsStandings: TeamsStandingsState;
   navigation: NavigationState;
   circuits: CircuitsState;
+  races: RacesState;
 };
 
 export default store;

@@ -75,5 +75,3 @@ migration 20201121211243-add-basic-entities..20201121212407-standings-relations
    updatedAt DateTime @updatedAt
  }
 ```
-
-

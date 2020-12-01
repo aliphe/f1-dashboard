@@ -129,5 +129,3 @@ migration 20201121220811-fix-driver..20201122091136-rename-constructor-team
 +  teamStandings   TeamStanding[]
  }
 ```
-
-

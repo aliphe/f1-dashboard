@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-import { Circuit, Race } from '@f1-dashboard/api-interfaces';
+import { Race, RaceResult } from '@f1-dashboard/api-interfaces';
 import { RequestResponse } from '.';
-import { environment } from 'apps/api/src/environments/environment';
+import { environment } from '../../../environments/environment';
 import CircuitsWrapper, { ApiCircuit } from './circuits';
+import DriversServiceWrapper, { ApiDriver } from './drivers';
+import StandingsServiceWrapper, { ApiTeam } from './standings';
 
 type ApiRace = {
   season: string;
@@ -15,9 +17,41 @@ type ApiRace = {
   time: string; // HH:MM:SS:00Z
 };
 
+type ApiRaceResult = {
+  number: string;
+  position: string;
+  points: string;
+  Driver: ApiDriver;
+  Constructor: ApiTeam;
+  grid: string;
+  laps: string;
+  status: 'Finished';
+  Time?: {
+    millis: string;
+    time: string;
+  };
+  FastestLap: {
+    rank: string;
+    lap: string;
+    Time: {
+      time: string;
+    };
+    AverageSpeed: {
+      units: string;
+      speed: string;
+    };
+  };
+};
+
 type RacesRequestResponse = RequestResponse<{
-  RacesTable: {
+  RaceTable: {
     Races: ApiRace[];
+  };
+}>;
+
+type RaceResultsRequestResponse = RequestResponse<{
+  RaceTable: {
+    Races: (ApiRace & { Results: ApiRaceResult[] })[];
   };
 }>;
 
@@ -26,13 +60,40 @@ export default class RacesServiceWrapper {
     const res = await axios.get<RacesRequestResponse>(
       `${environment.apis.ergast.url}/f1/${season}/races.json`
     );
-    return res.data.MRData.RacesTable.Races.map((r) =>
+    return res.data.MRData.RaceTable.Races.map((r) =>
       RacesServiceWrapper.formatRace(r)
     );
   }
 
+  static async fetchRaceResult(
+    season: number,
+    round: number
+  ): Promise<{ race: Race; results: RaceResult[] }> {
+    const res = await axios.get<RaceResultsRequestResponse>(
+      `${environment.apis.ergast.url}/f1/${season}/${round}/results.json`
+    );
+
+    const results = res.data.MRData.RaceTable.Races.map((race) =>
+      race.Results.map((result) => ({
+        driver: DriversServiceWrapper.formatDriver(result.Driver),
+        grid: Number(result.grid),
+        laps: Number(result.laps),
+        points: Number(result.points),
+        position: Number(result.position),
+        status: result.status,
+        team: StandingsServiceWrapper.formatTeam(result.Constructor),
+        time: result.Time?.time || null,
+      }))
+    ).flat(1);
+    return {
+      race: RacesServiceWrapper.formatRace(res.data.MRData.RaceTable.Races[0]),
+      results,
+    };
+  }
+
   static formatRace(race: ApiRace): Race {
     return {
+      season: { year: Number(race.season) },
       round: Number(race.round),
       url: race.url,
       circuit: CircuitsWrapper.formatCircuit(race.Circuit),

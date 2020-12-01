@@ -24,6 +24,7 @@ model Driver {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   DriverStanding DriverStanding[]
+  RaceResult     RaceResult[]
 }
 
 model Team {
@@ -34,8 +35,9 @@ model Team {
   seasons      Season[]
   TeamStanding TeamStanding[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  RaceResult RaceResult[]
 }
 
 model Circuit {
@@ -47,6 +49,48 @@ model Circuit {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Race      Race[]
+}
+
+model Race {
+  round      Int
+  name       String
+  season     Season       @relation(fields: [seasonYear], references: [year])
+  seasonYear Int
+  circuitId  String
+  circuit    Circuit      @relation(fields: [circuitId], references: [id])
+  date       DateTime
+  url        String
+  RaceResult RaceResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([round, seasonYear])
+}
+
+model RaceResult {
+  points   Int
+  position Int
+  grid     Int
+  laps     Int
+  time     String?
+  status   String
+
+  driver   Driver @relation(fields: [driverId], references: [id])
+  driverId String
+
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String
+
+  raceRound      Int
+  raceSeasonYear Int
+  race           Race @relation(fields: [raceRound, raceSeasonYear], references: [round, seasonYear])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([position, raceRound, raceSeasonYear])
 }
 
 model DriverStanding {
@@ -86,4 +130,5 @@ model Season {
   teams           Team[]
   driverStandings DriverStanding[]
   teamStandings   TeamStanding[]
+  Race            Race[]
 }

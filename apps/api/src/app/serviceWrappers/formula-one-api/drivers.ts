@@ -3,9 +3,9 @@ import axios from 'axios';
 import { RequestResponse } from '.';
 import { environment } from '../../../environments/environment';
 
-type ApiDriver = {
+export type ApiDriver = {
   driverId: string;
-  permanentNumber: number;
+  permanentNumber: string;
   code: string;
   url: string;
   givenName: string;
@@ -25,9 +25,21 @@ export default class DriversServiceWrapper {
     const res = await axios.get<DriversRequestResponse>(
       `${environment.apis.ergast.url}/f1${year ? '/' + year : ''}/drivers.json`
     );
-    return res.data.MRData.DriverTable.Drivers.map((d) => ({
-      ...d,
-      id: d.driverId,
-    }));
+    return res.data.MRData.DriverTable.Drivers.map((d) =>
+      DriversServiceWrapper.formatDriver(d)
+    );
+  }
+
+  static formatDriver(driver: ApiDriver): Driver {
+    return {
+      id: driver.driverId,
+      code: driver.code,
+      dateOfBirth: driver.dateOfBirth,
+      familyName: driver.familyName,
+      givenName: driver.givenName,
+      nationality: driver.nationality,
+      permanentNumber: Number(driver.permanentNumber),
+      url: driver.url,
+    };
   }
 }
