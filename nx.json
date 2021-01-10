@@ -35,6 +35,12 @@
     },
     "api-interfaces": {
       "tags": []
+    },
+    "crons": {
+      "tags": []
+    },
+    "utils": {
+      "tags": []
     }
   }
 }

@@ -23,19 +23,13 @@ export default function createRouter(prisma: PrismaClient) {
   const raceResultRepository = new RaceResultRepository(prisma);
   const formulaOneService = new FormulaOneService(
     prisma,
-    driverRepository,
-    driverStandingRepository,
-    teamStandingRepository,
-    circuitRepository,
-    raceRepository,
-    raceResultRepository
   );
 
-  app.use('/drivers', createDriversRouter(formulaOneService));
-  app.use('/standings', createStandingsRouter(formulaOneService));
+  app.use('/drivers', createDriversRouter(formulaOneService, driverRepository));
+  app.use('/standings', createStandingsRouter(formulaOneService, driverStandingRepository, teamStandingRepository));
 
-  app.use('/circuits', createCircuitsRouter(formulaOneService));
-  app.use('/races', createRacesRouter(formulaOneService));
+  app.use('/circuits', createCircuitsRouter(formulaOneService, circuitRepository));
+  app.use('/races', createRacesRouter(formulaOneService, raceRepository));
 
   return app;
 }

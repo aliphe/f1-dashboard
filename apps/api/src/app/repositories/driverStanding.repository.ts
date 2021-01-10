@@ -17,11 +17,8 @@ export default class DriverStandingRepository {
         create: {
           ...d,
           driver: {
-            connectOrCreate: {
-              create: d.driver,
-              where: {
-                id: d.driver.id,
-              },
+            connect: {
+              id: d.driver.id,
             },
           },
           season: {
@@ -34,11 +31,8 @@ export default class DriverStandingRepository {
         update: {
           ...d,
           driver: {
-            connectOrCreate: {
-              create: d.driver,
-              where: {
-                id: d.driver.id,
-              },
+            connect: {
+              id: d.driver.id,
             },
           },
         },

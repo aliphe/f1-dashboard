@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { Circuit } from '@f1-dashboard/api-interfaces';
 import { RequestResponse } from '.';
-import { environment } from 'apps/api/src/environments/environment';
+import { environment } from 'apps/crons/src/environments/environment';
 
 export type ApiCircuit = {
   circuitId: string;

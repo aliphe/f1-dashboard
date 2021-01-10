@@ -1,9 +1,13 @@
+import { DriverStanding } from '@f1-dashboard/api-interfaces';
 import { Router } from 'express';
 import AsyncHandler from 'express-async-handler';
+import DriverStandingRepository from '../../repositories/driverStanding.repository';
 import FormulaOneService from '../../services/formulaOne.service';
+import { RequestWithPayload } from '../types';
 
 export default function createDriverStandingsRouter(
-  formulaOneService: FormulaOneService
+  formulaOneService: FormulaOneService,
+  driverStandingRepository: DriverStandingRepository
 ) {
   const router = Router();
 
@@ -16,11 +20,28 @@ export default function createDriverStandingsRouter(
         year ? Number(year) : undefined
       );
 
-      return res.json({
+      return res.status(200).json({
         message: 'Drivers standings fetched successfully',
         data: {
           driverStandings,
         },
+      });
+    })
+  );
+
+  router.post(
+    '/',
+    AsyncHandler(async (req: RequestWithPayload<{ driversStandings: DriverStanding[], season: number }>, res) => {
+      const driversStandings = req.body.driversStandings;
+      const season = req.body.season;
+
+      await driverStandingRepository.upsertBatch(driversStandings, season)
+
+      return res.status(201).json({
+        message: 'Drivers Standings upserted sucessfully',
+        data: {
+          driversStandings
+        }
       });
     })
   );

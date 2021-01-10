@@ -17,11 +17,8 @@ export default class TeamStandingRepository {
         create: {
           ...c,
           team: {
-            connectOrCreate: {
-              create: c.team,
-              where: {
-                id: c.team.id,
-              },
+            connect: {
+              id: c.team.id,
             },
           },
           season: {
@@ -34,11 +31,8 @@ export default class TeamStandingRepository {
         update: {
           ...c,
           team: {
-            connectOrCreate: {
-              create: c.team,
-              where: {
-                id: c.team.id,
-              },
+            connect: {
+              id: c.team.id,
             },
           },
           season: {
