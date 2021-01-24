@@ -1,8 +1,9 @@
 import { TeamStanding } from '@f1-dashboard/api-interfaces';
 import { Router } from 'express';
-import AsyncHandler from 'express-async-handler';
 import TeamStandingRepository from '../../repositories/teamStanding.repository';
 import FormulaOneService from '../../services/formulaOne.service';
+import AsyncHandler from '../middlewares/async';
+import withApiKey from '../middlewares/withApiKey';
 import { RequestWithPayload } from '../types';
 
 export default function createTeamStandingsRouter(
@@ -13,6 +14,7 @@ export default function createTeamStandingsRouter(
 
   router.get(
     '/',
+    [withApiKey],
     AsyncHandler(async (req, res) => {
       const { year } = req.query;
 

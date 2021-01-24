@@ -1,8 +1,10 @@
 import { Circuit } from '@f1-dashboard/api-interfaces';
 import { Router} from 'express';
-import AsyncHandler from 'express-async-handler';
+
 import CircuitRepository from '../repositories/circuit.repository';
 import FormulaOneService from '../services/formulaOne.service';
+import AsyncHandler from './middlewares/async';
+import withApiKey from './middlewares/withApiKey';
 import { RequestWithPayload } from './types';
 
 export default function createCircuitsRouter(
@@ -27,7 +29,8 @@ export default function createCircuitsRouter(
 
   router.post(
     '/',
-    AsyncHandler(async (req: RequestWithPayload<{ circuits: Circuit[] }>, res) => {
+    [withApiKey],
+    AsyncHandler(async (req, res) => {
       console.log(req.body);
       const circuits = req.body.circuits;
 

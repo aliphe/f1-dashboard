@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import express from 'express';
 import CircuitRepository from '../repositories/circuit.repository';
-import TeamStandingRepository from '../repositories/constructorStanding.repository';
+import TeamStandingRepository from '../repositories/teamStanding.repository';
 import DriverRepository from '../repositories/driver.repository';
 import DriverStandingRepository from '../repositories/driverStanding.repository';
 import RaceRepository from '../repositories/race.repository';

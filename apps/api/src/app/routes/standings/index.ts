@@ -2,7 +2,7 @@ import { Router } from 'express';
 import FormulaOneService from '../../services/formulaOne.service';
 import createTeamStandingsRouter from './teams';
 import createDriverStandingsRouter from './drivers';
-import TeamStandingRepository from '../../repositories/constructorStanding.repository';
+import TeamStandingRepository from '../../repositories/teamStanding.repository';
 import DriverStandingRepository from '../../repositories/driverStanding.repository';
 
 export default function createStandingsRouter(

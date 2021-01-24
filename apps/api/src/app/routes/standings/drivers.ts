@@ -1,8 +1,9 @@
 import { DriverStanding } from '@f1-dashboard/api-interfaces';
 import { Router } from 'express';
-import AsyncHandler from 'express-async-handler';
 import DriverStandingRepository from '../../repositories/driverStanding.repository';
 import FormulaOneService from '../../services/formulaOne.service';
+import AsyncHandler from '../middlewares/async';
+import withApiKey from '../middlewares/withApiKey';
 import { RequestWithPayload } from '../types';
 
 export default function createDriverStandingsRouter(
@@ -13,6 +14,7 @@ export default function createDriverStandingsRouter(
 
   router.get(
     '/',
+    [withApiKey],
     AsyncHandler(async (req, res) => {
       const { year } = req.query;
 

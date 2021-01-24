@@ -1,8 +1,9 @@
 import { Race } from '@f1-dashboard/api-interfaces';
 import { Router} from 'express';
-import AsyncHandler from 'express-async-handler';
 import RaceRepository from '../repositories/race.repository';
 import FormulaOneService from '../services/formulaOne.service';
+import AsyncHandler from './middlewares/async';
+import withApiKey from './middlewares/withApiKey';
 import { RequestWithPayload } from './types';
 
 export default function createRacesRouter(
@@ -47,6 +48,7 @@ export default function createRacesRouter(
 
   router.post(
     '/',
+    [withApiKey],
     AsyncHandler(async (req: RequestWithPayload<{ races: Race[], season: number }>, res) => {
       console.log(req.body);
       const races = req.body.races;

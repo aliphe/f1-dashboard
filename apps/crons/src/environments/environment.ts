@@ -9,6 +9,7 @@ export const environment = {
   services: {
     entities: {
       url: process.env.ENTITIES_SERVICE_URL,
+      apiKey: process.env.ENTITIES_API_KEY,
     },
   },
   apis: {
