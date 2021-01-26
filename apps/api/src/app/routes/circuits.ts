@@ -1,5 +1,5 @@
 import { Circuit } from '@f1-dashboard/api-interfaces';
-import { Router} from 'express';
+import { Router } from 'express';
 
 import CircuitRepository from '../repositories/circuit.repository';
 import FormulaOneService from '../services/formulaOne.service';
@@ -34,13 +34,13 @@ export default function createCircuitsRouter(
       console.log(req.body);
       const circuits = req.body.circuits;
 
-      await circuitRepository.upsertBatch(circuits)
+      await circuitRepository.upsertBatch(circuits);
 
       return res.status(201).json({
         message: 'Circuits upserted sucessfully',
         data: {
-         circuits
-        }
+          circuits,
+        },
       });
     })
   );

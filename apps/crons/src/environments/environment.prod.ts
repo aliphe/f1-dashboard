@@ -8,8 +8,8 @@ export const environment = {
   },
   services: {
     entities: {
-      url: ''
-    }
+      url: '',
+    },
   },
   apis: {
     ergast: {

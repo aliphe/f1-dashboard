@@ -8,12 +8,18 @@ import DriverStandingRepository from '../../repositories/driverStanding.reposito
 export default function createStandingsRouter(
   formulaOneService: FormulaOneService,
   driverStandingRepository: DriverStandingRepository,
-  teamStandingRepository: TeamStandingRepository,
+  teamStandingRepository: TeamStandingRepository
 ) {
   const router = Router();
 
-  router.use('/drivers', createDriverStandingsRouter(formulaOneService, driverStandingRepository));
-  router.use('/teams', createTeamStandingsRouter(formulaOneService, teamStandingRepository));
+  router.use(
+    '/drivers',
+    createDriverStandingsRouter(formulaOneService, driverStandingRepository)
+  );
+  router.use(
+    '/teams',
+    createTeamStandingsRouter(formulaOneService, teamStandingRepository)
+  );
 
   return router;
 }

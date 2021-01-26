@@ -14,7 +14,6 @@ export default function createDriverStandingsRouter(
 
   router.get(
     '/',
-    [withApiKey],
     AsyncHandler(async (req, res) => {
       const { year } = req.query;
 
@@ -33,19 +32,28 @@ export default function createDriverStandingsRouter(
 
   router.post(
     '/',
-    AsyncHandler(async (req: RequestWithPayload<{ driversStandings: DriverStanding[], season: number }>, res) => {
-      const driversStandings = req.body.driversStandings;
-      const season = req.body.season;
+    [withApiKey],
+    AsyncHandler(
+      async (
+        req: RequestWithPayload<{
+          driversStandings: DriverStanding[];
+          season: number;
+        }>,
+        res
+      ) => {
+        const driversStandings = req.body.driversStandings;
+        const season = req.body.season;
 
-      await driverStandingRepository.upsertBatch(driversStandings, season)
+        await driverStandingRepository.upsertBatch(driversStandings, season);
 
-      return res.status(201).json({
-        message: 'Drivers Standings upserted sucessfully',
-        data: {
-          driversStandings
-        }
-      });
-    })
+        return res.status(201).json({
+          message: 'Drivers Standings upserted sucessfully',
+          data: {
+            driversStandings,
+          },
+        });
+      }
+    )
   );
 
   return router;

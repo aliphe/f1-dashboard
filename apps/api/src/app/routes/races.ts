@@ -1,5 +1,5 @@
 import { Race } from '@f1-dashboard/api-interfaces';
-import { Router} from 'express';
+import { Router } from 'express';
 import RaceRepository from '../repositories/race.repository';
 import FormulaOneService from '../services/formulaOne.service';
 import AsyncHandler from './middlewares/async';
@@ -8,7 +8,7 @@ import { RequestWithPayload } from './types';
 
 export default function createRacesRouter(
   formulaOneService: FormulaOneService,
-  raceRepository: RaceRepository,
+  raceRepository: RaceRepository
 ) {
   const router = Router();
 
@@ -49,20 +49,25 @@ export default function createRacesRouter(
   router.post(
     '/',
     [withApiKey],
-    AsyncHandler(async (req: RequestWithPayload<{ races: Race[], season: number }>, res) => {
-      console.log(req.body);
-      const races = req.body.races;
-      const season = req.body.season;
+    AsyncHandler(
+      async (
+        req: RequestWithPayload<{ races: Race[]; season: number }>,
+        res
+      ) => {
+        console.log(req.body);
+        const races = req.body.races;
+        const season = req.body.season;
 
-      await raceRepository.upsertBatch(races, season)
+        await raceRepository.upsertBatch(races, season);
 
-      return res.status(201).json({
-        message: 'Races upserted sucessfully',
-        data: {
-          races
-        }
-      });
-    })
+        return res.status(201).json({
+          message: 'Races upserted sucessfully',
+          data: {
+            races,
+          },
+        });
+      }
+    )
   );
   return router;
 }

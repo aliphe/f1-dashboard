@@ -9,8 +9,9 @@ import {
   createStyles,
   Toolbar,
 } from '@material-ui/core';
-import { navigate, NavigationChoice } from './navigationSlice';
+import { navigate, NavigationPaths } from './navigationSlice';
 import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,9 +28,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const pathsDisplayName: { [key in keyof typeof NavigationPaths]: string } = {
+  CIRCUITS_LIST: 'Circuits List',
+  DRIVERS_LIST: 'Drivers List',
+  DRIVERS_STANDINGS: 'Drivers Standings',
+  TEAMS_STANDINGS: 'Teams Standings',
+  RACES_LIST: 'Races List',
+};
+
 const Navigation: React.FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const history = useHistory();
+  console.log(Object.values(NavigationPaths));
 
   return (
     <Drawer
@@ -43,13 +53,9 @@ const Navigation: React.FC = () => {
       <Toolbar />
       <div className={classes.drawerContainer}>
         <List>
-          {Object.values(NavigationChoice).map((c) => (
-            <ListItem
-              button
-              onClick={() => dispatch(navigate({ navigation: c }))}
-              key={c}
-            >
-              <ListItemText primary={c} />
+          {Object.entries(NavigationPaths).map(([key, path]) => (
+            <ListItem key={key} onClick={() => history.push(path)}>
+              <ListItemText primary={pathsDisplayName[key]} />
             </ListItem>
           ))}
         </List>

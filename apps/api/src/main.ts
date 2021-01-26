@@ -1,4 +1,4 @@
-import {config as dotenvConfig } from 'dotenv';
+import { config as dotenvConfig } from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import * as express from 'express';
 import createRouter from './app/routes';

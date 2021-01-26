@@ -1,14 +1,14 @@
-import { Driver } from '@f1-dashboard/api-interfaces';
+import { Team } from '@f1-dashboard/api-interfaces';
 import { Router } from 'express';
-import DriverRepository from '../repositories/driver.repository';
+import TeamRepository from '../repositories/team.repository';
 import FormulaOneService from '../services/formulaOne.service';
 import AsyncHandler from './middlewares/async';
 import withApiKey from './middlewares/withApiKey';
 import { RequestWithPayload } from './types';
 
-export default function createDriversRouter(
+export default function createTeamsRouter(
   formulaOneService: FormulaOneService,
-  driverRepository: DriverRepository
+  teamRepository: TeamRepository
 ) {
   const router = Router();
 
@@ -17,11 +17,11 @@ export default function createDriversRouter(
     AsyncHandler(async (req, res) => {
       const { year } = req.query;
 
-      const drivers = await formulaOneService.fetchDrivers(Number(year));
+      const teams = await formulaOneService.fetchTeams(Number(year));
       return res.status(200).json({
-        message: 'Drivers fetched successfully',
+        message: 'Teams fetched successfully',
         data: {
-          drivers,
+          teams,
         },
       });
     })
@@ -32,19 +32,19 @@ export default function createDriversRouter(
     [withApiKey],
     AsyncHandler(
       async (
-        req: RequestWithPayload<{ drivers: Driver[]; season: number }>,
+        req: RequestWithPayload<{ teams: Team[]; season: number }>,
         res
       ) => {
         console.log(req.body);
-        const drivers = req.body.drivers;
+        const teams = req.body.teams;
         const season = req.body.season;
 
-        await driverRepository.upsertBatch(drivers, season);
+        await teamRepository.upsertBatch(teams, season);
 
         return res.status(201).json({
-          message: 'Drivers upserted sucessfully',
+          message: 'Teams upserted sucessfully',
           data: {
-            drivers,
+            teams,
           },
         });
       }

@@ -1,21 +1,31 @@
-import { Driver, Circuit, DriverStanding, TeamStanding, Response } from "@f1-dashboard/api-interfaces";
-import { logger } from "@f1-dashboard/utils";
-import Axios, { AxiosInstance } from "axios";
-import { environment } from "../../environments/environment";
-import CircuitsServiceWrapper from "../serviceWrappers/formula-one-api/circuits";
-import DriversServiceWrapper from "../serviceWrappers/formula-one-api/drivers";
-import RacesServiceWrapper from "../serviceWrappers/formula-one-api/races";
-import StandingsServiceWrapper from "../serviceWrappers/formula-one-api/standings";
+import {
+  Driver,
+  Circuit,
+  DriverStanding,
+  TeamStanding,
+  Response,
+  Team,
+} from '@f1-dashboard/api-interfaces';
+import { logger } from '@f1-dashboard/utils';
+import Axios, { AxiosInstance } from 'axios';
+import { environment } from '../../environments/environment';
+import CircuitsServiceWrapper from '../serviceWrappers/formula-one-api/circuits';
+import DriversServiceWrapper from '../serviceWrappers/formula-one-api/drivers';
+import RacesServiceWrapper from '../serviceWrappers/formula-one-api/races';
+import StandingsServiceWrapper from '../serviceWrappers/formula-one-api/standings';
+import TeamsServiceWrapper from '../serviceWrappers/formula-one-api/teams';
 
 export default class FetchService {
-  private readonly http: AxiosInstance
+  private readonly http: AxiosInstance;
   constructor(http?: AxiosInstance) {
-    this.http = http || Axios.create({
-      baseURL: environment.services.entities.url,
-      headers: {
-        apiKey: environment.services.entities.apiKey,
-      }
-    })
+    this.http =
+      http ||
+      Axios.create({
+        baseURL: environment.services.entities.url,
+        headers: {
+          apiKey: environment.services.entities.apiKey,
+        },
+      });
   }
 
   async fetchSeason(season: number): Promise<void> {
@@ -24,14 +34,12 @@ export default class FetchService {
     await this.fetchCircuits();
     await this.fetchRaces(season);
     await this.fetchDriverStandings(season);
+    await this.fetchTeams(season);
     await this.fetchTeamstandings(season);
-  
+
     logger.info(`Ending CRON for season :: ${season}`);
-  
   }
-  async fetchDrivers(
-    season: number
-  ): Promise<void> {
+  async fetchDrivers(season: number): Promise<void> {
     logger.info(`Fetching drivers`);
     const drivers = await DriversServiceWrapper.fetchDrivers(season);
     logger.info({ drivers }, `Fetched drivers`);
@@ -45,7 +53,7 @@ export default class FetchService {
       throw new Error(`Failed to upsert drivers : ${driversRes.data.message}`);
     }
   }
-  
+
   async fetchCircuits(): Promise<void> {
     const circuits = await CircuitsServiceWrapper.fetchCircuits();
     logger.info({ circuits }, `Fetched circuits`);
@@ -55,10 +63,12 @@ export default class FetchService {
     if (circuitsRes.status === 201) {
       logger.info('Upserted circuits successfully');
     } else {
-      throw new Error(`Failed to upsert circuits : ${circuitsRes.data.message}`);
+      throw new Error(
+        `Failed to upsert circuits : ${circuitsRes.data.message}`
+      );
     }
   }
-  
+
   async fetchRaces(season: number): Promise<void> {
     const races = await RacesServiceWrapper.fetchRaces(season);
     logger.info({ races }, `Fetched races`);
@@ -72,21 +82,18 @@ export default class FetchService {
       throw new Error(`Failed to upsert races : ${racesRes.data.message}`);
     }
   }
-  
-  async fetchDriverStandings(
-    season: number
-  ): Promise<void> {
+
+  async fetchDriverStandings(season: number): Promise<void> {
     const driversStandings = await StandingsServiceWrapper.fetchDriverStandings(
       season
     );
     logger.info({ driversStandings }, `Fetched driver Standings`);
-    const driversStandingsRes = await this.http.post<Response<DriverStanding[]>>(
-      '/standings/drivers',
-      {
-        driversStandings,
-        season,
-      }
-    );
+    const driversStandingsRes = await this.http.post<
+      Response<DriverStanding[]>
+    >('/standings/drivers', {
+      driversStandings,
+      season,
+    });
     if (driversStandingsRes.status === 201) {
       logger.info('Upserted Drivers Standings successfully');
     } else {
@@ -95,10 +102,23 @@ export default class FetchService {
       );
     }
   }
-  
-  async fetchTeamstandings(
-    season: number
-  ): Promise<void> {
+
+  async fetchTeams(season: number): Promise<void> {
+    logger.info(`Fetching teams`);
+    const teams = await TeamsServiceWrapper.fetchTeams(season);
+    logger.info({ teams }, `Fetched teams`);
+    const teamsRes = await this.http.post<Response<Team[]>>('/teams', {
+      teams,
+      season,
+    });
+    if (teamsRes.status === 201) {
+      logger.info('Upserted teams successfully.');
+    } else {
+      throw new Error(`Failed to upsert teams : ${teamsRes.data.message}`);
+    }
+  }
+
+  async fetchTeamstandings(season: number): Promise<void> {
     const teamsStandings = await StandingsServiceWrapper.fetchTeamStandings(
       season
     );
@@ -118,5 +138,4 @@ export default class FetchService {
       );
     }
   }
-
 }

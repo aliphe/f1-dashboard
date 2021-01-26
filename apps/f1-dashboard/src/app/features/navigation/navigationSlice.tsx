@@ -1,26 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export enum NavigationChoice {
-  DRIVERS_LIST = 'Drivers List',
-  DRIVERS_STANDINGS = 'Drivers Standings',
-  TEAMS_STANDINGS = 'Teams Standings',
-  CIRCUITS_LIST = 'Circuits',
-  RACES_LIST = 'Races',
+export enum NavigationPaths {
+  DRIVERS_LIST = '/drivers',
+  DRIVERS_STANDINGS = '/standings/drivers',
+  TEAMS_STANDINGS = '/standings/teams',
+  CIRCUITS_LIST = '/circuits',
+  RACES_LIST = '/races',
 }
 
 export interface NavigationState {
-  focused: NavigationChoice;
+  focused: NavigationPaths;
 }
 
 const initialState: NavigationState = {
-  focused: NavigationChoice.DRIVERS_STANDINGS,
+  focused: NavigationPaths.DRIVERS_STANDINGS,
 };
 
 const navigationReducer = createSlice({
   name: 'navigation',
   initialState,
   reducers: {
-    navigate(state, action: PayloadAction<{ navigation: NavigationChoice }>) {
+    navigate(state, action: PayloadAction<{ navigation: NavigationPaths }>) {
       state.focused = action.payload.navigation;
     },
   },

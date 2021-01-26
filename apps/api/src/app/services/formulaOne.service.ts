@@ -4,13 +4,12 @@ import {
   DriverStanding,
   Circuit,
   Race,
+  Team,
 } from '@f1-dashboard/api-interfaces';
 import { PrismaClient } from '@prisma/client';
 
 export default class FormulaOneService {
-  constructor(
-    private readonly prisma: PrismaClient,
-  ) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
   async fetchDrivers(season: number): Promise<Driver[]> {
     const drivers = await this.prisma.driver.findMany({
@@ -46,6 +45,19 @@ export default class FormulaOneService {
         dateOfBirth: d.driver.dateOfBirth.toISOString(),
       },
     }));
+  }
+
+  async fetchTeams(season: number): Promise<Team[]> {
+    const teams = await this.prisma.team.findMany({
+      where: {
+        seasons: {
+          some: {
+            year: season,
+          },
+        },
+      },
+    });
+    return teams;
   }
 
   async fetchTeamStandings(season: number): Promise<TeamStanding[]> {

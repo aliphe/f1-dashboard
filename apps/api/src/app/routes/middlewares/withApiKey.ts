@@ -6,7 +6,6 @@ export default function withApiKey( // TODO find better typings
   res: any,
   next: any
 ): RequestHandler {
-  console.log(req.headers, environment);
   if (req.headers.apikey === environment.apiKey) {
     return next();
   }

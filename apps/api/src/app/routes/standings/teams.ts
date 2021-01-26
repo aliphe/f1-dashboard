@@ -8,13 +8,12 @@ import { RequestWithPayload } from '../types';
 
 export default function createTeamStandingsRouter(
   formulaOneService: FormulaOneService,
-  teamStandingRepository: TeamStandingRepository,
+  teamStandingRepository: TeamStandingRepository
 ) {
   const router = Router();
 
   router.get(
     '/',
-    [withApiKey],
     AsyncHandler(async (req, res) => {
       const { year } = req.query;
 
@@ -33,19 +32,28 @@ export default function createTeamStandingsRouter(
 
   router.post(
     '/',
-    AsyncHandler(async (req: RequestWithPayload<{ teamsStandings: TeamStanding[], season: number }>, res) => {
-      const teamsStandings = req.body.teamsStandings;
-      const season = req.body.season;
+    [withApiKey],
+    AsyncHandler(
+      async (
+        req: RequestWithPayload<{
+          teamsStandings: TeamStanding[];
+          season: number;
+        }>,
+        res
+      ) => {
+        const teamsStandings = req.body.teamsStandings;
+        const season = req.body.season;
 
-      await teamStandingRepository.upsertBatch(teamsStandings, season)
+        await teamStandingRepository.upsertBatch(teamsStandings, season);
 
-      return res.status(201).json({
-        message: 'Teams Standings upserted sucessfully',
-        data: {
-          teamsStandings
-        }
-      });
-    })
+        return res.status(201).json({
+          message: 'Teams Standings upserted sucessfully',
+          data: {
+            teamsStandings,
+          },
+        });
+      }
+    )
   );
 
   return router;
