@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TableContainer from '@material-ui/core/TableContainer';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 import { fetchTeamsByYear } from './teamsSlice';
 import {
   Paper,
@@ -13,20 +13,17 @@ import {
   Typography,
 } from '@material-ui/core';
 
-function processAge(dateString: string): number {
-  return new Date().getFullYear() - new Date(dateString).getFullYear();
-}
-
 const TeamsList: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, teams } = useSelector((state: RootState) => ({
+  const { isLoading, teams, season } = useSelector((state: RootState) => ({
     isLoading: state.teams.isLoading,
     teams: Object.values(state.teams.byId),
+    season: state.season.season,
   }));
 
   useEffect(() => {
     if (!isLoading && !teams.length) {
-      dispatch(fetchTeamsByYear(2020));
+      dispatch(fetchTeamsByYear(season));
     }
   }, [dispatch, teams, isLoading]);
 

@@ -12,19 +12,22 @@ import {
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDriverStandingsByYear } from './driverStandingsSlice';
-import { RootState } from '../../../store';
+import { RootState } from '../../../../store';
 
 const DriverStandings: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, isFetched, drivers } = useSelector(
-    (state: RootState) => state.driversStandings
+  const { isLoading, isFetched, drivers, season } = useSelector(
+    (state: RootState) => ({
+      ...state.driversStandings,
+      season: state.season.season,
+    })
   );
 
   useEffect(() => {
     if (!isLoading && !isFetched) {
-      dispatch(fetchDriverStandingsByYear(2020));
+      dispatch(fetchDriverStandingsByYear(season));
     }
-  }, [dispatch, isLoading, isFetched]);
+  }, [dispatch, isLoading, isFetched, season]);
 
   if (isLoading) {
     return <div>Loading...</div>;

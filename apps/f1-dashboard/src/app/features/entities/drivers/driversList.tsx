@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TableContainer from '@material-ui/core/TableContainer';
-import { RootState } from '../../store';
+import { RootState } from '../../../store';
 import { fetchDriversByYear } from './driversSlice';
 import {
   Paper,
@@ -19,16 +19,17 @@ function processAge(dateString: string): number {
 
 const DriversList: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, drivers } = useSelector((state: RootState) => ({
+  const { isLoading, drivers, season } = useSelector((state: RootState) => ({
     isLoading: state.drivers.isLoading,
     drivers: Object.values(state.drivers.byId),
+    season: state.season.season,
   }));
 
   useEffect(() => {
     if (!isLoading && !drivers.length) {
-      dispatch(fetchDriversByYear(2020));
+      dispatch(fetchDriversByYear(season));
     }
-  }, [dispatch, drivers, isLoading]);
+  }, [dispatch, drivers, isLoading, season]);
 
   return (
     <Paper className={'drivers-list'}>

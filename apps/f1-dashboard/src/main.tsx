@@ -13,8 +13,8 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-      <ConnectedRouter history={history}>
-        <App />
+        <ConnectedRouter history={history}>
+          <App />
         </ConnectedRouter>
       </ThemeProvider>
     </Provider>

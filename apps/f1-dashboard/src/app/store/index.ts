@@ -2,21 +2,27 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createBrowserHistory } from 'history';
 import { connectRouter } from 'connected-react-router';
 
-import driversReducer, { DriversState } from '../features/drivers/driversSlice';
+import driversReducer, {
+  DriversState,
+} from '../features/entities/drivers/driversSlice';
 import circuitsReducer, {
   CircuitsState,
-} from '../features/circuits/circuitsSlice';
-import navigationReducer, {
-  NavigationState,
-} from '../features/navigation/navigationSlice';
+} from '../features/entities/circuits/circuitsSlice';
 import driversStandingsReducer, {
   DriversStandingsState,
-} from '../features/standings/drivers/driverStandingsSlice';
+} from '../features/entities/standings/drivers/driverStandingsSlice';
 import teamStandingsReducer, {
   TeamsStandingsState,
-} from '../features/standings/teams/teamsStandingsSlice';
-import racesReducer, { RacesState } from '../features/races/racesSlice';
-import teamsReducer, { TeamsState } from '../features/teams/teamsSlice';
+} from '../features/entities/standings/teams/teamsStandingsSlice';
+import racesReducer, {
+  RacesState,
+} from '../features/entities/races/racesSlice';
+import teamsReducer, {
+  TeamsState,
+} from '../features/entities/teams/teamsSlice';
+import seasonSelectorReducer, {
+  SeasonState,
+} from '../features/seasonSelector/seasonSelectorSlice';
 
 export const history = createBrowserHistory();
 
@@ -27,9 +33,9 @@ const store = configureStore({
     driversStandings: driversStandingsReducer,
     circuits: circuitsReducer,
     teamsStandings: teamStandingsReducer,
-    navigation: navigationReducer,
     races: racesReducer,
     teams: teamsReducer,
+    season: seasonSelectorReducer,
   },
 });
 
@@ -37,10 +43,10 @@ export type RootState = {
   drivers: DriversState;
   driversStandings: DriversStandingsState;
   teamsStandings: TeamsStandingsState;
-  navigation: NavigationState;
   circuits: CircuitsState;
   races: RacesState;
   teams: TeamsState;
+  season: SeasonState;
 };
 
 export default store;

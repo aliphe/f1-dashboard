@@ -9,8 +9,17 @@ import {
   createStyles,
   Toolbar,
 } from '@material-ui/core';
-import { NavigationPaths } from './navigationSlice';
 import { useHistory } from 'react-router-dom';
+
+
+export enum NavigationPaths {
+  DRIVERS_LIST = '/drivers',
+  TEAMS_LIST = '/teams',
+  DRIVERS_STANDINGS = '/standings/drivers',
+  TEAMS_STANDINGS = '/standings/teams',
+  CIRCUITS_LIST = '/circuits',
+  RACES_LIST = '/races',
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

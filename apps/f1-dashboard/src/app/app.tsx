@@ -2,6 +2,7 @@ import { Grid } from '@material-ui/core';
 import React from 'react';
 import Header from './components/Header';
 import Navigation from './features/navigation';
+import SeasonSelector from './features/seasonSelector';
 import Router from './router';
 
 export const App = () => {
@@ -14,6 +15,9 @@ export const App = () => {
         </Grid>
         <Grid item>
           <Router />
+        </Grid>
+        <Grid item>
+          <SeasonSelector />
         </Grid>
       </Grid>
     </div>

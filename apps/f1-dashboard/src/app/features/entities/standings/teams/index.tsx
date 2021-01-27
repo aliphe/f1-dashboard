@@ -9,22 +9,25 @@ import {
   TableCell,
   TableBody,
 } from '@material-ui/core';
-import { RootState } from '../../../store';
+import { RootState } from '../../../../store';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeamsStandingsByYear } from './teamsStandingsSlice';
 
 const TeamsStandings: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, isFetched, teams } = useSelector(
-    (state: RootState) => state.teamsStandings
+  const { isLoading, isFetched, teams, season } = useSelector(
+    (state: RootState) => ({
+      ...state.teamsStandings,
+      season: state.season.season,
+    })
   );
 
   useEffect(() => {
     if (!isLoading && !isFetched) {
-      dispatch(fetchTeamsStandingsByYear(2020));
+      dispatch(fetchTeamsStandingsByYear(season));
     }
-  }, [dispatch, isLoading, isFetched]);
+  }, [dispatch, isLoading, isFetched, season]);
 
   if (isLoading) {
     return <div>Loading...</div>;

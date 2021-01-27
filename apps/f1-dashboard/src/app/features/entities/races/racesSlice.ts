@@ -1,11 +1,10 @@
 import { Race, RaceResult } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-import RacesAPI from './racesApi';
+import Api from '../../../helpers/api';
 
 export interface RacesState {
-  byYear: {
-    [year: number]: {
+  bySeason: {
+    [season: number]: {
       [round: number]: {
         race: Race;
         results: RaceResult[];
@@ -17,23 +16,23 @@ export interface RacesState {
 }
 
 const initialState: RacesState = {
-  byYear: {},
+  bySeason: {},
 
   isLoading: false,
 };
 
 export const fetchRaces = createAsyncThunk(
   'races/fetch',
-  async (year: number) => {
-    const response = await RacesAPI.fetchRaces(year);
+  async (season: number) => {
+    const response = await Api.fetchRaces(season);
     return response.data;
   }
 );
 
 export const fetchRaceResult = createAsyncThunk(
   'races/results/fetch',
-  async ({ year, round }: { year: number; round: number }) => {
-    const response = await RacesAPI.fetchRaceResults(year, round);
+  async ({ season, round }: { season: number; round: number }) => {
+    const response = await Api.fetchRaceResults(season, round);
     return response.data;
   }
 );
@@ -45,10 +44,10 @@ const racesReducer = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchRaces.fulfilled, (state, action) => {
       action.payload.data.races.forEach((race: Race) => {
-        if (!state.byYear[race.season.year]) {
-          state.byYear[race.season.year] = {};
+        if (!state.bySeason[race.season.year]) {
+          state.bySeason[race.season.year] = {};
         }
-        state.byYear[race.season.year][race.round] = { race, results: [] };
+        state.bySeason[race.season.year][race.round] = { race, results: [] };
         state.isLoading = false;
       });
     });
@@ -62,10 +61,10 @@ const racesReducer = createSlice({
     builder.addCase(fetchRaceResult.fulfilled, (state, action) => {
       const args = action.meta.arg;
       const results = action.payload.data.results;
-      if (!state.byYear[args.year] || !state.byYear[args.year][args.round]) {
+      if (!state.bySeason[args.season] || !state.bySeason[args.season][args.round]) {
         return state;
       }
-      state.byYear[args.year][args.round].results = results;
+      state.bySeason[args.season][args.round].results = results;
     });
     builder.addCase(fetchRaceResult.pending, (state) => {
       state.isLoading = true;
