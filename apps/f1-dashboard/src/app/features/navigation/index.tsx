@@ -9,9 +9,8 @@ import {
   createStyles,
   Toolbar,
 } from '@material-ui/core';
-import { navigate, NavigationPaths } from './navigationSlice';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { NavigationPaths } from './navigationSlice';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const pathsDisplayName: { [key in keyof typeof NavigationPaths]: string } = {
   CIRCUITS_LIST: 'Circuits List',
   DRIVERS_LIST: 'Drivers List',
+  TEAMS_LIST: 'Teams List',
   DRIVERS_STANDINGS: 'Drivers Standings',
   TEAMS_STANDINGS: 'Teams Standings',
   RACES_LIST: 'Races List',

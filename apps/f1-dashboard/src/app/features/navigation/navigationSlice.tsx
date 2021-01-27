@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export enum NavigationPaths {
   DRIVERS_LIST = '/drivers',
+  TEAMS_LIST = '/teams',
   DRIVERS_STANDINGS = '/standings/drivers',
   TEAMS_STANDINGS = '/standings/teams',
   CIRCUITS_LIST = '/circuits',

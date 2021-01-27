@@ -6,12 +6,16 @@ import DriversList from '../features/drivers/driversList';
 import RaceList from '../features/races/raceList';
 import DriverStandings from '../features/standings/drivers';
 import TeamsStandings from '../features/standings/teams';
+import TeamsList from '../features/teams/teamsList';
 
 const Router: React.FC = () => (
     <div>
       <Switch>
         <Route path="/drivers">
           <DriversList />
+        </Route>
+        <Route path="/teams">
+          <TeamsList/>
         </Route>
         <Route path="/standings/drivers">
           <DriverStandings />

@@ -16,6 +16,7 @@ import teamStandingsReducer, {
   TeamsStandingsState,
 } from '../features/standings/teams/teamsStandingsSlice';
 import racesReducer, { RacesState } from '../features/races/racesSlice';
+import teamsReducer, { TeamsState } from '../features/teams/teamsSlice';
 
 export const history = createBrowserHistory();
 
@@ -28,6 +29,7 @@ const store = configureStore({
     teamsStandings: teamStandingsReducer,
     navigation: navigationReducer,
     races: racesReducer,
+    teams: teamsReducer,
   },
 });
 
@@ -38,6 +40,7 @@ export type RootState = {
   navigation: NavigationState;
   circuits: CircuitsState;
   races: RacesState;
+  teams: TeamsState;
 };
 
 export default store;
