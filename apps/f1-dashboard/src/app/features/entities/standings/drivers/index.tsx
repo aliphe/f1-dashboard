@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { DriverStanding } from '@f1-dashboard/api-interfaces';
 import {
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -13,25 +14,29 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDriverStandingsByYear } from './driverStandingsSlice';
 import { RootState } from '../../../../store';
+import { setLastRequest } from '../../../requests/requestsSlice';
 
 const DriverStandings: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, isFetched, drivers, season } = useSelector(
+  const { isLoading, drivers, season, isLastRequested } = useSelector(
     (state: RootState) => ({
       ...state.driversStandings,
       season: state.season.season,
+      isLastRequested: state.requests.lastRequested === 'driversStandings',
     })
   );
 
   useEffect(() => {
-    if (!isLoading && !isFetched) {
+    if (!isLoading && !isLastRequested) {
       dispatch(fetchDriverStandingsByYear(season));
+      dispatch(setLastRequest({ lastRequested: 'driversStandings' }));
     }
-  }, [dispatch, isLoading, isFetched, season]);
+  }, [dispatch, isLoading, isLastRequested, season]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
+
   return (
     <Paper>
       <Typography variant="h6" component="div">

@@ -10,7 +10,7 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-
+import SeasonSelector from '../seasonSelector';
 
 export enum NavigationPaths {
   DRIVERS_LIST = '/drivers',
@@ -60,10 +60,11 @@ const Navigation: React.FC = () => {
       }}
     >
       <Toolbar />
+      <SeasonSelector />
       <div className={classes.drawerContainer}>
         <List>
           {Object.entries(NavigationPaths).map(([key, path]) => (
-            <ListItem key={key} onClick={() => history.push(path)}>
+            <ListItem button key={key} onClick={() => history.push(path)}>
               <ListItemText primary={pathsDisplayName[key]} />
             </ListItem>
           ))}

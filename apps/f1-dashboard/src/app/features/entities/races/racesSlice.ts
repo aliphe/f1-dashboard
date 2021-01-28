@@ -3,12 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import Api from '../../../helpers/api';
 
 export interface RacesState {
-  bySeason: {
-    [season: number]: {
-      [round: number]: {
-        race: Race;
-        results: RaceResult[];
-      };
+  byRound: {
+    [round: number]: {
+      race: Race;
+      results: RaceResult[];
     };
   };
 
@@ -16,7 +14,7 @@ export interface RacesState {
 }
 
 const initialState: RacesState = {
-  bySeason: {},
+  byRound: {},
 
   isLoading: false,
 };
@@ -44,10 +42,7 @@ const racesReducer = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchRaces.fulfilled, (state, action) => {
       action.payload.data.races.forEach((race: Race) => {
-        if (!state.bySeason[race.season.year]) {
-          state.bySeason[race.season.year] = {};
-        }
-        state.bySeason[race.season.year][race.round] = { race, results: [] };
+        state.byRound[race.round] = { race, results: [] };
         state.isLoading = false;
       });
     });
@@ -61,10 +56,8 @@ const racesReducer = createSlice({
     builder.addCase(fetchRaceResult.fulfilled, (state, action) => {
       const args = action.meta.arg;
       const results = action.payload.data.results;
-      if (!state.bySeason[args.season] || !state.bySeason[args.season][args.round]) {
-        return state;
-      }
-      state.bySeason[args.season][args.round].results = results;
+
+      state.byRound[args.round].results = results;
     });
     builder.addCase(fetchRaceResult.pending, (state) => {
       state.isLoading = true;

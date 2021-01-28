@@ -23,6 +23,9 @@ import teamsReducer, {
 import seasonSelectorReducer, {
   SeasonState,
 } from '../features/seasonSelector/seasonSelectorSlice';
+import requestsReducer, {
+  RequestsState,
+} from '../features/requests/requestsSlice';
 
 export const history = createBrowserHistory();
 
@@ -36,6 +39,7 @@ const store = configureStore({
     races: racesReducer,
     teams: teamsReducer,
     season: seasonSelectorReducer,
+    requests: requestsReducer,
   },
 });
 
@@ -47,6 +51,7 @@ export type RootState = {
   races: RacesState;
   teams: TeamsState;
   season: SeasonState;
+  requests: RequestsState;
 };
 
 export default store;
