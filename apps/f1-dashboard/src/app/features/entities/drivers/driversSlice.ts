@@ -39,6 +39,8 @@ const driversReducer = createSlice({
       });
     });
     builder.addCase(fetchDriversByYear.pending, (state) => {
+      state.allIds = [];
+      state.byId = {};
       state.isLoading = true;
     });
     builder.addCase(fetchDriversByYear.rejected, (state) => {

@@ -35,7 +35,6 @@ export default function createTeamsRouter(
         req: RequestWithPayload<{ teams: Team[]; season: number }>,
         res
       ) => {
-        console.log(req.body);
         const teams = req.body.teams;
         const season = req.body.season;
 

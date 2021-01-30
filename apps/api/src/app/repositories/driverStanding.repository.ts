@@ -13,7 +13,12 @@ export default class DriverStandingRepository {
   ): Promise<DriverStandingModel[]> {
     const transaction = drivers.map((d) =>
       this.prisma.driverStanding.upsert({
-        where: { position: Number(d.position) },
+        where: {
+          position_seasonYear: {
+            position: Number(d.position),
+            seasonYear: season,
+          },
+        },
         create: {
           ...d,
           driver: {

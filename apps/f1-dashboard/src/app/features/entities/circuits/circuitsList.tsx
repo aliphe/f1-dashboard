@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { fetchCircuits } from './circuitsSlice';
 import {
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -12,21 +13,30 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+import { setLastRequest } from '../../requests/requestsSlice';
+import { sortByString } from '../../../helpers/utils';
 
 const CircuitList: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, circuits } = useSelector((state: RootState) => ({
-    isLoading: state.circuits.isLoading,
-    circuits: Object.values(state.circuits.byId),
-  }));
+  const { isLoading, circuits, isLastRequested } = useSelector(
+    (state: RootState) => ({
+      isLoading: state.circuits.isLoading,
+      circuits: Object.values(state.circuits.byId),
+      isLastRequested: state.requests.lastRequested === 'circuits',
+    })
+  );
 
   useEffect(() => {
-    if (!isLoading && !circuits.length) {
+    if (!isLoading && !isLastRequested) {
       dispatch(fetchCircuits());
+      dispatch(setLastRequest({ lastRequested: 'circuits' }));
     }
-  }, [dispatch, circuits, isLoading]);
+  }, [dispatch, circuits, isLoading, isLastRequested]);
 
-  console.log(circuits);
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
   return (
     <Paper className={'circuits-list'}>
       <Typography variant="h6" component="div">
@@ -43,7 +53,7 @@ const CircuitList: React.FC = () => {
           </TableHead>
 
           <TableBody>
-            {circuits.map((circuit) => (
+            {sortByString(circuits, 'name').map((circuit) => (
               <TableRow key={circuit.id}>
                 <TableCell>{circuit.name}</TableCell>
                 <TableCell>{circuit.city}</TableCell>

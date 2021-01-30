@@ -35,7 +35,6 @@ export default function createDriversRouter(
         req: RequestWithPayload<{ drivers: Driver[]; season: number }>,
         res
       ) => {
-        console.log(req.body);
         const drivers = req.body.drivers;
         const season = req.body.season;
 

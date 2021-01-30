@@ -1,22 +1,15 @@
-import { Race, RaceResult } from '@f1-dashboard/api-interfaces';
+import { Race } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import Api from '../../../helpers/api';
 
 export interface RacesState {
-  bySeason: {
-    [season: number]: {
-      [round: number]: {
-        race: Race;
-        results: RaceResult[];
-      };
-    };
-  };
+  races: Race[];
 
   isLoading: boolean;
 }
 
 const initialState: RacesState = {
-  bySeason: {},
+  races: [],
 
   isLoading: false,
 };
@@ -43,35 +36,27 @@ const racesReducer = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchRaces.fulfilled, (state, action) => {
-      action.payload.data.races.forEach((race: Race) => {
-        if (!state.bySeason[race.season.year]) {
-          state.bySeason[race.season.year] = {};
-        }
-        state.bySeason[race.season.year][race.round] = { race, results: [] };
-        state.isLoading = false;
-      });
+      state.races = action.payload.data.races;
+      state.isLoading = false;
     });
     builder.addCase(fetchRaces.pending, (state) => {
+      state.races = [];
       state.isLoading = true;
     });
     builder.addCase(fetchRaces.rejected, (state) => {
       state.isLoading = false;
     });
 
-    builder.addCase(fetchRaceResult.fulfilled, (state, action) => {
-      const args = action.meta.arg;
-      const results = action.payload.data.results;
-      if (!state.bySeason[args.season] || !state.bySeason[args.season][args.round]) {
-        return state;
-      }
-      state.bySeason[args.season][args.round].results = results;
-    });
-    builder.addCase(fetchRaceResult.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(fetchRaceResult.rejected, (state) => {
-      state.isLoading = false;
-    });
+    // builder.addCase(fetchRaceResult.fulfilled, (state, action) => {
+    //   const args = action.meta.arg;
+    //   const results = action.payload.data.results;
+    // });
+    // builder.addCase(fetchRaceResult.pending, (state) => {
+    //   state.isLoading = true;
+    // });
+    // builder.addCase(fetchRaceResult.rejected, (state) => {
+    //   state.isLoading = false;
+    // });
   },
 });
 

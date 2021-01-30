@@ -3,7 +3,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -70,7 +70,7 @@ model Race {
 }
 
 model RaceResult {
-  points  Float 
+  points   Int
   position Int
   grid     Int
   laps     Int
@@ -95,7 +95,7 @@ model RaceResult {
 
 model DriverStanding {
   position Int 
-  points  Float 
+  points   Int
   wins     Int
 
   season     Season @relation(fields: [seasonYear], references: [year])
@@ -112,7 +112,7 @@ model DriverStanding {
 
 model TeamStanding {
   position Int
-  points   Float
+  points   Int
   wins     Int
 
   season     Season @relation(fields: [seasonYear], references: [year])

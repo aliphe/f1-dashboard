@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { DriverStanding } from '@f1-dashboard/api-interfaces';
 import {
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -13,25 +14,31 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDriverStandingsByYear } from './driverStandingsSlice';
 import { RootState } from '../../../../store';
+import { setLastRequest } from '../../../requests/requestsSlice';
+import { sortByNumber } from '../../../../helpers/utils';
+import { driverName } from '../../../../helpers/format';
 
 const DriverStandings: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, isFetched, drivers, season } = useSelector(
+  const { isLoading, drivers, season, isLastRequested } = useSelector(
     (state: RootState) => ({
       ...state.driversStandings,
       season: state.season.season,
+      isLastRequested: state.requests.lastRequested === 'driversStandings',
     })
   );
 
   useEffect(() => {
-    if (!isLoading && !isFetched) {
+    if (!isLoading && !isLastRequested) {
       dispatch(fetchDriverStandingsByYear(season));
+      dispatch(setLastRequest({ lastRequested: 'driversStandings' }));
     }
-  }, [dispatch, isLoading, isFetched, season]);
+  }, [dispatch, isLoading, isLastRequested, season]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
+
   return (
     <Paper>
       <Typography variant="h6" component="div">
@@ -47,10 +54,10 @@ const DriverStandings: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {drivers.map((d: DriverStanding) => (
+            {sortByNumber(drivers, 'position').map((d: DriverStanding) => (
               <TableRow key={d.position}>
                 <TableCell>{d.position}</TableCell>
-                <TableCell>{d.driver.familyName}</TableCell>
+                <TableCell>{driverName(d.driver)}</TableCell>
                 <TableCell>{d.points}</TableCell>
               </TableRow>
             ))}

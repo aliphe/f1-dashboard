@@ -4,6 +4,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import { RootState } from '../../../store';
 import { fetchTeamsByYear } from './teamsSlice';
 import {
+  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -12,20 +13,30 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+import { setLastRequest } from '../../requests/requestsSlice';
+import { sortByString } from '../../../helpers/utils';
 
 const TeamsList: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, teams, season } = useSelector((state: RootState) => ({
-    isLoading: state.teams.isLoading,
-    teams: Object.values(state.teams.byId),
-    season: state.season.season,
-  }));
+  const { isLoading, teams, season, isLastRequested } = useSelector(
+    (state: RootState) => ({
+      isLoading: state.teams.isLoading,
+      teams: Object.values(state.teams.byId),
+      season: state.season.season,
+      isLastRequested: state.requests.lastRequested === 'teams',
+    })
+  );
 
   useEffect(() => {
-    if (!isLoading && !teams.length) {
+    if (!isLoading && !isLastRequested) {
       dispatch(fetchTeamsByYear(season));
+      dispatch(setLastRequest({ lastRequested: 'teams' }));
     }
-  }, [dispatch, teams, isLoading]);
+  }, [dispatch, teams, isLoading, season, isLastRequested]);
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
 
   return (
     <Paper className={'teams-list'}>
@@ -43,7 +54,7 @@ const TeamsList: React.FC = () => {
           </TableHead>
 
           <TableBody>
-            {teams.map((team) => (
+            {sortByString(teams, 'name').map((team) => (
               <TableRow key={team.id}>
                 <TableCell>{team.name}</TableCell>
                 <TableCell>{team.nationality}</TableCell>

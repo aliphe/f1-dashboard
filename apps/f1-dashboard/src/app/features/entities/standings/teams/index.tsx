@@ -8,30 +8,36 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  CircularProgress,
 } from '@material-ui/core';
 import { RootState } from '../../../../store';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeamsStandingsByYear } from './teamsStandingsSlice';
+import { setLastRequest } from '../../../requests/requestsSlice';
+import { sortByNumber } from 'apps/f1-dashboard/src/app/helpers/utils';
 
 const TeamsStandings: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, isFetched, teams, season } = useSelector(
+  const { isLoading, teams, season, isLastRequested } = useSelector(
     (state: RootState) => ({
       ...state.teamsStandings,
       season: state.season.season,
+      isLastRequested: state.requests.lastRequested === 'teamsStandings',
     })
   );
 
   useEffect(() => {
-    if (!isLoading && !isFetched) {
+    if (!isLoading && !isLastRequested) {
       dispatch(fetchTeamsStandingsByYear(season));
+      dispatch(setLastRequest({ lastRequested: 'teamsStandings' }));
     }
-  }, [dispatch, isLoading, isFetched, season]);
+  }, [dispatch, isLoading, isLastRequested, season]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <CircularProgress />;
   }
+
   return (
     <Paper>
       <Typography variant="h6" component="div">
@@ -47,7 +53,7 @@ const TeamsStandings: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teams.map((c: TeamStanding) => (
+            {sortByNumber(teams, 'position').map((c: TeamStanding) => (
               <TableRow key={c.position}>
                 <TableCell>{c.position}</TableCell>
                 <TableCell>{c.team.name}</TableCell>
