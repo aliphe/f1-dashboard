@@ -54,7 +54,6 @@ export default function createRacesRouter(
         req: RequestWithPayload<{ races: Race[]; season: number }>,
         res
       ) => {
-        console.log(req.body);
         const races = req.body.races;
         const season = req.body.season;
 

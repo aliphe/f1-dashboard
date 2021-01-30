@@ -37,6 +37,8 @@ const circuitsReducer = createSlice({
       });
     });
     builder.addCase(fetchCircuits.pending, (state) => {
+      state.allIds = [];
+      state.byId = {};
       state.isLoading = true;
     });
     builder.addCase(fetchCircuits.rejected, (state) => {

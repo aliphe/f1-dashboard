@@ -12,6 +12,7 @@ async function main() {
   const fetchService = new FetchService();
 
   await fetchService.fetchSeason(season);
+  process.exit(0);
 }
 
 main();

@@ -39,6 +39,8 @@ const teamsReducer = createSlice({
       });
     });
     builder.addCase(fetchTeamsByYear.pending, (state) => {
+      state.allIds = [];
+      state.byId = {};
       state.isLoading = true;
     });
     builder.addCase(fetchTeamsByYear.rejected, (state) => {

@@ -6,16 +6,12 @@ export interface DriversStandingsState {
   drivers: DriverStanding[];
 
   isLoading: boolean;
-
-  isFetched: boolean;
 }
 
 const initialState: DriversStandingsState = {
   drivers: [],
 
   isLoading: false,
-
-  isFetched: false,
 };
 
 export const fetchDriverStandingsByYear = createAsyncThunk(
@@ -32,16 +28,15 @@ const driversStandingsReducer = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchDriverStandingsByYear.fulfilled, (state, action) => {
-      state.drivers.push(...action.payload.data.driverStandings);
+      state.drivers = action.payload.data.driverStandings;
       state.isLoading = false;
-      state.isFetched = true;
     });
     builder.addCase(fetchDriverStandingsByYear.pending, (state) => {
+      state.drivers = [];
       state.isLoading = true;
     });
     builder.addCase(fetchDriverStandingsByYear.rejected, (state) => {
       state.isLoading = false;
-      state.isFetched = true;
     });
   },
 });

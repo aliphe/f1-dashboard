@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import CircuitsWrapper, { ApiCircuit } from './circuits';
 import DriversServiceWrapper, { ApiDriver } from './drivers';
 import StandingsServiceWrapper, { ApiTeam } from './standings';
+import { logger } from '@f1-dashboard/utils';
 
 type ApiRace = {
   season: string;
@@ -14,7 +15,7 @@ type ApiRace = {
   raceName: string;
   Circuit: ApiCircuit;
   date: string; // YYYY-MM-DD
-  time: string; // HH:MM:SS:00Z
+  time?: string; // HH:MM:SS:00Z
 };
 
 type ApiRaceResult = {
@@ -92,12 +93,15 @@ export default class RacesServiceWrapper {
   }
 
   static formatRace(race: ApiRace): Race {
+    logger.info(race);
     return {
       season: { year: Number(race.season) },
       round: Number(race.round),
       url: race.url,
       circuit: CircuitsWrapper.formatCircuit(race.Circuit),
-      date: new Date(`${race.date}T${race.time}`).toISOString(),
+      date: race.time
+        ? new Date(`${race.date}T${race.time}`).toISOString()
+        : new Date(race.date).toISOString(),
       name: race.raceName,
     };
   }

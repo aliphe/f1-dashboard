@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { setLastRequest } from '../../requests/requestsSlice';
+import { sortByString } from '../../../helpers/utils';
 
 const TeamsList: React.FC = () => {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const TeamsList: React.FC = () => {
           </TableHead>
 
           <TableBody>
-            {teams.map((team) => (
+            {sortByString(teams, 'name').map((team) => (
               <TableRow key={team.id}>
                 <TableCell>{team.name}</TableCell>
                 <TableCell>{team.nationality}</TableCell>

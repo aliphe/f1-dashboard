@@ -15,6 +15,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeamsStandingsByYear } from './teamsStandingsSlice';
 import { setLastRequest } from '../../../requests/requestsSlice';
+import { sortByNumber } from 'apps/f1-dashboard/src/app/helpers/utils';
 
 const TeamsStandings: React.FC = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const TeamsStandings: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teams.map((c: TeamStanding) => (
+            {sortByNumber(teams, 'position').map((c: TeamStanding) => (
               <TableRow key={c.position}>
                 <TableCell>{c.position}</TableCell>
                 <TableCell>{c.team.name}</TableCell>

@@ -13,7 +13,12 @@ export default class TeamStandingRepository {
   ): Promise<TeamStandingModel[]> {
     const transaction = teams.map((c) =>
       this.prisma.teamStanding.upsert({
-        where: { position: Number(c.position) },
+        where: {
+          position_seasonYear: {
+            position: Number(c.position),
+            seasonYear: season,
+          },
+        },
         create: {
           ...c,
           team: {

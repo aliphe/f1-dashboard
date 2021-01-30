@@ -48,7 +48,6 @@ const pathsDisplayName: { [key in keyof typeof NavigationPaths]: string } = {
 const Navigation: React.FC = () => {
   const classes = useStyles();
   const history = useHistory();
-  console.log(Object.values(NavigationPaths));
 
   return (
     <Drawer

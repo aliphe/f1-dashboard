@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchDriverStandingsByYear } from './driverStandingsSlice';
 import { RootState } from '../../../../store';
 import { setLastRequest } from '../../../requests/requestsSlice';
+import { sortByNumber } from '../../../../helpers/utils';
+import { driverName } from '../../../../helpers/format';
 
 const DriverStandings: React.FC = () => {
   const dispatch = useDispatch();
@@ -52,10 +54,10 @@ const DriverStandings: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {drivers.map((d: DriverStanding) => (
+            {sortByNumber(drivers, 'position').map((d: DriverStanding) => (
               <TableRow key={d.position}>
                 <TableCell>{d.position}</TableCell>
-                <TableCell>{d.driver.familyName}</TableCell>
+                <TableCell>{driverName(d.driver)}</TableCell>
                 <TableCell>{d.points}</TableCell>
               </TableRow>
             ))}

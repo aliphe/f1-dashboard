@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { setLastRequest } from '../../requests/requestsSlice';
+import { sortByString } from '../../../helpers/utils';
 
 const CircuitList: React.FC = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const CircuitList: React.FC = () => {
           </TableHead>
 
           <TableBody>
-            {circuits.map((circuit) => (
+            {sortByString(circuits, 'name').map((circuit) => (
               <TableRow key={circuit.id}>
                 <TableCell>{circuit.name}</TableCell>
                 <TableCell>{circuit.city}</TableCell>

@@ -31,7 +31,6 @@ export default function createCircuitsRouter(
     '/',
     [withApiKey],
     AsyncHandler(async (req, res) => {
-      console.log(req.body);
       const circuits = req.body.circuits;
 
       await circuitRepository.upsertBatch(circuits);

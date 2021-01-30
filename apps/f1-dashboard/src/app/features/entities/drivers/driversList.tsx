@@ -14,10 +14,8 @@ import {
   Typography,
 } from '@material-ui/core';
 import { setLastRequest } from '../../requests/requestsSlice';
-
-function processAge(dateString: string): number {
-  return new Date().getFullYear() - new Date(dateString).getFullYear();
-}
+import { sortByString } from '../../../helpers/utils';
+import { driverName, processAge } from '../../../helpers/format';
 
 const DriversList: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,7 +33,7 @@ const DriversList: React.FC = () => {
       dispatch(fetchDriversByYear(season));
       dispatch(setLastRequest({ lastRequested: 'drivers' }));
     }
-  }, [dispatch, drivers, isLoading, season]);
+  }, [dispatch, drivers, isLoading, season, isLastFetched]);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -59,9 +57,9 @@ const DriversList: React.FC = () => {
           </TableHead>
 
           <TableBody>
-            {drivers.map((driver) => (
+            {sortByString(drivers, 'familyName').map((driver) => (
               <TableRow key={driver.id}>
-                <TableCell>{driver.familyName}</TableCell>
+                <TableCell>{driverName(driver)}</TableCell>
                 <TableCell>{driver.permanentNumber}</TableCell>
                 <TableCell>{driver.nationality}</TableCell>
                 <TableCell>{processAge(driver.dateOfBirth)}</TableCell>

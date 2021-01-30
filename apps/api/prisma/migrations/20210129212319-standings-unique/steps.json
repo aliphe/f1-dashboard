@@ -1,0 +1,59 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "DriverStanding",
+          "field": "position"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "DriverStanding",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[position, seasonYear]"
+            }
+          ]
+        },
+        "directive": "unique"
+      }
+    },
+    {
+      "tag": "DeleteDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "TeamStanding",
+          "field": "position"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Model",
+          "model": "TeamStanding",
+          "arguments": [
+            {
+              "name": "",
+              "value": "[position, seasonYear]"
+            }
+          ]
+        },
+        "directive": "unique"
+      }
+    }
+  ]
+}
