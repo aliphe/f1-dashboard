@@ -1,5 +1,5 @@
 import {
-  Response,
+  ApiResponse,
   Circuit,
   Driver,
   Race,
@@ -12,42 +12,42 @@ import axios from 'axios';
 
 export default class Api {
   static fetchCircuits() {
-    return axios.get<Response<{ circuits: Circuit[] }>>(`/api/circuits`);
+    return axios.get<ApiResponse<{ circuits: Circuit[] }>>(`/api/circuits`);
   }
 
   static async fetchDriversByYear(year: number) {
-    const res = await axios.get<Response<{ drivers: Driver[] }>>(
+    const res = await axios.get<ApiResponse<{ drivers: Driver[] }>>(
       `/api/drivers?year=${year}`
     );
     return res;
   }
 
   static fetchRaces(year: number) {
-    return axios.get<Response<{ races: Race[] }>>(`/api/races?year=${year}`);
+    return axios.get<ApiResponse<{ races: Race[] }>>(`/api/races?year=${year}`);
   }
 
   static fetchRaceResults(year: number, round: number) {
-    return axios.get<Response<{ results: RaceResult[] }>>(
+    return axios.get<ApiResponse<{ results: RaceResult[] }>>(
       `/api/races/results?year=${year}&round=${round}`
     );
   }
 
   static async fetchDriversStandingsByYear(year: number) {
     const res = await axios.get<
-      Response<{ driverStandings: DriverStanding[] }>
+      ApiResponse<{ driverStandings: DriverStanding[] }>
     >(`/api/standings/drivers?year=${year}`);
     return res;
   }
 
   static async fetchTeamsStandingsByYear(year: number) {
-    const res = await axios.get<Response<{ teamStandings: TeamStanding[] }>>(
+    const res = await axios.get<ApiResponse<{ teamStandings: TeamStanding[] }>>(
       `/api/standings/teams?year=${year}`
     );
     return res;
   }
 
   static async fetchTeamsByYear(year: number) {
-    const res = await axios.get<Response<{ teams: Team[] }>>(
+    const res = await axios.get<ApiResponse<{ teams: Team[] }>>(
       `/api/teams?year=${year}`
     );
     return res;

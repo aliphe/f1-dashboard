@@ -5,5 +5,6 @@ module.exports = {
     '<rootDir>/libs/api-interfaces',
     '<rootDir>/apps/crons',
     '<rootDir>/libs/utils',
+    '<rootDir>/libs/api-clients',
   ],
 };

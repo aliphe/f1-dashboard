@@ -26,6 +26,9 @@ import seasonSelectorReducer, {
 import requestsReducer, {
   RequestsState,
 } from '../features/requests/requestsSlice';
+import raceResultsReducer, {
+  RaceResultsState,
+} from '../features/entities/races/results/raceResultsSlice';
 
 export const history = createBrowserHistory();
 
@@ -37,6 +40,7 @@ const store = configureStore({
     circuits: circuitsReducer,
     teamsStandings: teamStandingsReducer,
     races: racesReducer,
+    raceResults: raceResultsReducer,
     teams: teamsReducer,
     season: seasonSelectorReducer,
     requests: requestsReducer,
@@ -49,6 +53,7 @@ export type RootState = {
   teamsStandings: TeamsStandingsState;
   circuits: CircuitsState;
   races: RacesState;
+  raceResults: RaceResultsState;
   teams: TeamsState;
   season: SeasonState;
   requests: RequestsState;

@@ -1,6 +1,6 @@
 import { TeamStanding } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import Api from '../../../../helpers/api';
+import { f1ApiClient } from '../..';
 
 export interface TeamsStandingsState {
   teams: TeamStanding[];
@@ -16,10 +16,7 @@ const initialState: TeamsStandingsState = {
 
 export const fetchTeamsStandingsByYear = createAsyncThunk(
   'standings/team/fetchByYear',
-  async (year: number) => {
-    const response = await Api.fetchTeamsStandingsByYear(year);
-    return response.data;
-  }
+  async (year: number) => f1ApiClient.fetchTeamsStandings(year)
 );
 
 const teamsStandingsReducer = createSlice({

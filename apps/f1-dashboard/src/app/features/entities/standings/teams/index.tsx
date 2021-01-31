@@ -15,7 +15,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeamsStandingsByYear } from './teamsStandingsSlice';
 import { setLastRequest } from '../../../requests/requestsSlice';
-import { sortByNumber } from 'apps/f1-dashboard/src/app/helpers/utils';
+import { sortByNumber } from '../../../../helpers/utils';
 
 const TeamsStandings: React.FC = () => {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import { Race } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import Api from '../../../helpers/api';
+import { f1ApiClient } from '..';
 
 export interface RacesState {
   races: Race[];
@@ -16,18 +16,13 @@ const initialState: RacesState = {
 
 export const fetchRaces = createAsyncThunk(
   'races/fetch',
-  async (season: number) => {
-    const response = await Api.fetchRaces(season);
-    return response.data;
-  }
+  async (season: number) => f1ApiClient.fetchRaces(season)
 );
 
 export const fetchRaceResult = createAsyncThunk(
   'races/results/fetch',
-  async ({ season, round }: { season: number; round: number }) => {
-    const response = await Api.fetchRaceResults(season, round);
-    return response.data;
-  }
+  async ({ season, round }: { season: number; round: number }) =>
+    f1ApiClient.fetchRaceResults(season, round)
 );
 
 const racesReducer = createSlice({

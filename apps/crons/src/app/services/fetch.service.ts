@@ -1,30 +1,22 @@
-import {
-  Driver,
-  Circuit,
-  DriverStanding,
-  TeamStanding,
-  Response,
-  Team,
-} from '@f1-dashboard/api-interfaces';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { F1ApiClient } from '@f1-dashboard/api-clients'; // Don't know why I need this since api-clients is a lib
+
 import { logger } from '@f1-dashboard/utils';
-import Axios, { AxiosInstance } from 'axios';
-import { environment } from '../../environments/environment';
 import CircuitsServiceWrapper from '../serviceWrappers/formula-one-api/circuits';
 import DriversServiceWrapper from '../serviceWrappers/formula-one-api/drivers';
 import RacesServiceWrapper from '../serviceWrappers/formula-one-api/races';
 import StandingsServiceWrapper from '../serviceWrappers/formula-one-api/standings';
 import TeamsServiceWrapper from '../serviceWrappers/formula-one-api/teams';
+import { environment } from '../../environments/environment';
 
 export default class FetchService {
-  private readonly http: AxiosInstance;
-  constructor(http?: AxiosInstance) {
-    this.http =
-      http ||
-      Axios.create({
-        baseURL: environment.services.entities.url,
-        headers: {
-          apiKey: environment.services.entities.apiKey,
-        },
+  private readonly api: F1ApiClient;
+  constructor(api?: F1ApiClient) {
+    this.api =
+      api ||
+      new F1ApiClient({
+        apiUrl: environment.services.f1Api.url,
+        apiKey: environment.services.f1Api.apiKey,
       });
   }
 
@@ -39,103 +31,78 @@ export default class FetchService {
 
     logger.info(`Ending CRON for season :: ${season}`);
   }
+
+  async fetchSeasonRound(season: number, round: number): Promise<void> {
+    await this.fetchRaceResults(season, round);
+  }
+
   async fetchDrivers(season: number): Promise<void> {
     logger.info(`Fetching drivers`);
     const drivers = await DriversServiceWrapper.fetchDrivers(season);
     logger.info({ drivers }, `Fetched drivers`);
-    const driversRes = await this.http.post<Response<Driver[]>>('/drivers', {
+    await this.api.insertDrivers(season, {
       drivers,
-      season,
     });
-    if (driversRes.status === 201) {
-      logger.info('Upserted drivers successfully.');
-    } else {
-      throw new Error(`Failed to upsert drivers : ${driversRes.data.message}`);
-    }
+    logger.info('Upserted drivers successfully.');
   }
 
   async fetchCircuits(): Promise<void> {
     const circuits = await CircuitsServiceWrapper.fetchCircuits();
     logger.info({ circuits }, `Fetched circuits`);
-    const circuitsRes = await this.http.post<Response<Circuit[]>>('/circuits', {
+    await this.api.insertCircuits({
       circuits,
     });
-    if (circuitsRes.status === 201) {
-      logger.info('Upserted circuits successfully');
-    } else {
-      throw new Error(
-        `Failed to upsert circuits : ${circuitsRes.data.message}`
-      );
-    }
+    logger.info('Upserted circuits successfully');
   }
 
   async fetchRaces(season: number): Promise<void> {
     const races = await RacesServiceWrapper.fetchRaces(season);
     logger.info({ races }, `Fetched races`);
-    const racesRes = await this.http.post<Response<Circuit[]>>('/races', {
+    await this.api.insertRaces(season, {
       races,
-      season,
     });
-    if (racesRes.status === 201) {
-      logger.info('Upserted races successfully');
-    } else {
-      throw new Error(`Failed to upsert races : ${racesRes.data.message}`);
-    }
+    logger.info('Upserted races successfully');
   }
 
   async fetchDriverStandings(season: number): Promise<void> {
-    const driversStandings = await StandingsServiceWrapper.fetchDriverStandings(
+    const driverStandings = await StandingsServiceWrapper.fetchDriverStandings(
       season
     );
-    logger.info({ driversStandings }, `Fetched driver Standings`);
-    const driversStandingsRes = await this.http.post<
-      Response<DriverStanding[]>
-    >('/standings/drivers', {
-      driversStandings,
-      season,
-    });
-    if (driversStandingsRes.status === 201) {
-      logger.info('Upserted Drivers Standings successfully');
-    } else {
-      throw new Error(
-        `Failed to upsert drivers standings: ${driversStandingsRes.data.message}`
-      );
-    }
+    logger.info({ driverStandings }, `Fetched Drivers Standings`);
+    await this.api.insertDriversStandings(season, { driverStandings });
+    logger.info('Upserted Drivers Standings successfully');
   }
 
   async fetchTeams(season: number): Promise<void> {
     logger.info(`Fetching teams`);
     const teams = await TeamsServiceWrapper.fetchTeams(season);
     logger.info({ teams }, `Fetched teams`);
-    const teamsRes = await this.http.post<Response<Team[]>>('/teams', {
+    await this.api.insertTeams(season, {
       teams,
-      season,
     });
-    if (teamsRes.status === 201) {
-      logger.info('Upserted teams successfully.');
-    } else {
-      throw new Error(`Failed to upsert teams : ${teamsRes.data.message}`);
-    }
+    logger.info('Upserted teams successfully.');
   }
 
   async fetchTeamstandings(season: number): Promise<void> {
-    const teamsStandings = await StandingsServiceWrapper.fetchTeamStandings(
+    const teamStandings = await StandingsServiceWrapper.fetchTeamStandings(
       season
     );
-    logger.info({ teamsStandings }, `Fetched team Standings`);
-    const teamsStandingsRes = await this.http.post<Response<TeamStanding[]>>(
-      '/standings/teams',
-      {
-        teamsStandings,
-        season,
-      }
+    logger.info({ teamStandings }, `Fetched team Standings`);
+    await this.api.insertTeamsStandings(season, {
+      teamStandings,
+    });
+    logger.info('Upserted Teams Standings successfully');
+  }
+
+  async fetchRaceResults(season: number, round: number): Promise<void> {
+    const raceResults = await RacesServiceWrapper.fetchRaceResults(
+      season,
+      round
     );
-    if (teamsStandingsRes.status === 201) {
-      logger.info('Upserted Teams Standings successfully');
-    } else {
-      throw new Error(
-        `Failed to upsert teams standings: ${teamsStandingsRes.data.message}`
-      );
-    }
+    logger.info({ raceResults }, `Fetched Race results`);
+    await this.api.insertRaceResults(season, round, {
+      raceResults: raceResults.results,
+    });
+    logger.info('Upserted Race Results successfully');
   }
 }

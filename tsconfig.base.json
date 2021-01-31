@@ -17,7 +17,8 @@
     "baseUrl": ".",
     "paths": {
       "@f1-dashboard/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@f1-dashboard/utils": ["libs/utils/src/index.ts"]
+      "@f1-dashboard/utils": ["libs/utils/src/index.ts"],
+      "@f1-dashboard/api-clients": ["libs/api-clients/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

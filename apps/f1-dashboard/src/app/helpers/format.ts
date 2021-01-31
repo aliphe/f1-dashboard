@@ -8,6 +8,6 @@ export function processAge(dateString: string): number {
   return new Date().getFullYear() - new Date(dateString).getFullYear();
 }
 
-export function formatDate(date:  Date| string): string {
+export function formatDate(date: Date | string): string {
   return new Date(date).toLocaleDateString();
 }

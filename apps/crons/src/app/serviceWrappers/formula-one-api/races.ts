@@ -66,7 +66,7 @@ export default class RacesServiceWrapper {
     );
   }
 
-  static async fetchRaceResult(
+  static async fetchRaceResults(
     season: number,
     round: number
   ): Promise<{ race: Race; results: RaceResult[] }> {
