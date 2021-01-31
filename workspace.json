@@ -101,56 +101,6 @@
         }
       }
     },
-    "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps/api/src",
-      "projectType": "application",
-      "prefix": "api",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/api",
-            "main": "apps/api/src/main.ts",
-            "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api/src/environments/environment.ts",
-                  "with": "apps/api/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "api-interfaces": {
       "root": "libs/api-interfaces",
       "sourceRoot": "libs/api-interfaces/src",
@@ -167,6 +117,176 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/api-interfaces/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "crons": {
+      "root": "apps/crons",
+      "sourceRoot": "apps/crons/src",
+      "projectType": "application",
+      "prefix": "crons",
+      "schematics": {},
+      "architect": {
+        "build-season": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/crons",
+            "main": "apps/crons/src/main-season.ts",
+            "tsConfig": "apps/crons/tsconfig.app.json",
+            "assets": ["apps/crons/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/crons/src/environments/environment.ts",
+                  "with": "apps/crons/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve-season": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "crons:build-season"
+          }
+        },
+        "build-round": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/crons",
+            "main": "apps/crons/src/main-round.ts",
+            "tsConfig": "apps/crons/tsconfig.app.json",
+            "assets": ["apps/crons/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/crons/src/environments/environment.ts",
+                  "with": "apps/crons/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve-round": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "crons:build-round"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/crons/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/crons/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "utils": {
+      "root": "libs/utils",
+      "sourceRoot": "libs/utils/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/utils/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/utils/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-clients": {
+      "root": "libs/api-clients",
+      "sourceRoot": "libs/api-clients/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-clients/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api-clients/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "f1-api": {
+      "root": "apps/f1-api",
+      "sourceRoot": "apps/f1-api/src",
+      "projectType": "application",
+      "prefix": "api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/f1-api",
+            "main": "apps/f1-api/src/main.ts",
+            "tsConfig": "apps/f1-api/tsconfig.app.json",
+            "assets": ["apps/f1-api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/f1-api/src/environments/environment.ts",
+                  "with": "apps/f1-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "f1-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/f1-api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/f1-api/jest.config.js",
             "passWithNoTests": true
           }
         }

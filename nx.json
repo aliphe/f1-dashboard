@@ -30,10 +30,19 @@
       "tags": [],
       "implicitDependencies": ["f1-dashboard"]
     },
-    "api": {
+    "api-interfaces": {
       "tags": []
     },
-    "api-interfaces": {
+    "crons": {
+      "tags": []
+    },
+    "utils": {
+      "tags": []
+    },
+    "api-clients": {
+      "tags": []
+    },
+    "f1-api": {
       "tags": []
     }
   }

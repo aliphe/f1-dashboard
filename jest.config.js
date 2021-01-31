@@ -3,5 +3,8 @@ module.exports = {
     '<rootDir>/apps/f1-dashboard',
     '<rootDir>/apps/api',
     '<rootDir>/libs/api-interfaces',
+    '<rootDir>/apps/crons',
+    '<rootDir>/libs/utils',
+    '<rootDir>/libs/api-clients',
   ],
 };

@@ -9,8 +9,17 @@ import {
   createStyles,
   Toolbar,
 } from '@material-ui/core';
-import { navigate, NavigationChoice } from './navigationSlice';
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import SeasonSelector from '../seasonSelector';
+
+export enum NavigationPaths {
+  DRIVERS_LIST = '/drivers',
+  TEAMS_LIST = '/teams',
+  DRIVERS_STANDINGS = '/standings/drivers',
+  TEAMS_STANDINGS = '/standings/teams',
+  CIRCUITS_LIST = '/circuits',
+  RACES_LIST = '/races',
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,9 +36,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const pathsDisplayName: { [key in keyof typeof NavigationPaths]: string } = {
+  CIRCUITS_LIST: 'Circuits List',
+  DRIVERS_LIST: 'Drivers List',
+  TEAMS_LIST: 'Teams List',
+  DRIVERS_STANDINGS: 'Drivers Standings',
+  TEAMS_STANDINGS: 'Teams Standings',
+  RACES_LIST: 'Races List',
+};
+
 const Navigation: React.FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const history = useHistory();
 
   return (
     <Drawer
@@ -41,15 +59,12 @@ const Navigation: React.FC = () => {
       }}
     >
       <Toolbar />
+      <SeasonSelector />
       <div className={classes.drawerContainer}>
         <List>
-          {Object.values(NavigationChoice).map((c) => (
-            <ListItem
-              button
-              onClick={() => dispatch(navigate({ navigation: c }))}
-              key={c}
-            >
-              <ListItemText primary={c} />
+          {Object.entries(NavigationPaths).map(([key, path]) => (
+            <ListItem button key={key} onClick={() => history.push(path)}>
+              <ListItemText primary={pathsDisplayName[key]} />
             </ListItem>
           ))}
         </List>
