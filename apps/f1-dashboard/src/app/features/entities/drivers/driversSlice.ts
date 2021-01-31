@@ -1,6 +1,6 @@
 import { Driver } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import Api from '../../../helpers/api';
+import { f1ApiClient } from '..';
 
 export interface DriversState {
   byId: { [driverId: string]: Driver };
@@ -20,10 +20,7 @@ const initialState: DriversState = {
 
 export const fetchDriversByYear = createAsyncThunk(
   'drivers/fetchByYear',
-  async (year: number) => {
-    const response = await Api.fetchDriversByYear(year);
-    return response.data;
-  }
+  async (year: number) => f1ApiClient.fetchDrivers(year)
 );
 
 const driversReducer = createSlice({

@@ -7,8 +7,9 @@ export const environment = {
     },
   },
   services: {
-    entities: {
-      url: '',
+    f1Api: {
+      url: process.env.F1_API_URL,
+      apiKey: process.env.F1_API_KEY,
     },
   },
   apis: {

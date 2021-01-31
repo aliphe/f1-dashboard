@@ -1,7 +1,6 @@
 import { Circuit } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-import Api from '../../../helpers/api';
+import { f1ApiClient } from '..';
 
 export interface CircuitsState {
   byId: { [circuitId: string]: Circuit };
@@ -19,10 +18,9 @@ const initialState: CircuitsState = {
   isLoading: false,
 };
 
-export const fetchCircuits = createAsyncThunk('circuits/fetch', async () => {
-  const response = await Api.fetchCircuits();
-  return response.data;
-});
+export const fetchCircuits = createAsyncThunk('circuits/fetch', async () =>
+  f1ApiClient.fetchCircuits()
+);
 
 const circuitsReducer = createSlice({
   name: 'circuits',

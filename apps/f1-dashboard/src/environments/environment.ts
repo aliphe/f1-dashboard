@@ -3,4 +3,7 @@
 
 export const environment = {
   production: false,
+  apis: {
+    f1: '/api',
+  },
 };
