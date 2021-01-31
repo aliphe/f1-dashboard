@@ -1,90 +1,82 @@
 # f1-dashboard
 
-This project was generated using [Nx](https://nx.dev).
+This project aims at becoming a truly complete and customizable dashboard to display Formula 1 Championship's data.
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+The ultimate goal is to make a dashboard that enables one to create its own view of the F1 data, and share it for other to use or improve.
 
-🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
+But, let's be honest, it currently mostly serves as an excuse for me to try and learn some exciting techs, which are [Prisma](https://github.com/prisma/prisma) and [Nx](https://github.com/nrwl/nx), and the list might grow.
 
-## Adding capabilities to your workspace
+# Install and run the project
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+In order to install the project, the only thing you need to do is to run `yarn` inside the project directory.
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+You will then need a `PostgreSQL` database running (I highly recommend using docker for this),
+and set the environment variables in the API to point to your database url.
 
-Below are our core plugins:
+You will then need to initialize your database and prisma, by running :
+``` sh
+yarn db:migrate       # Applies all the migrations to your database
+yarn prisma:generate  # Generates prisma client from your database state
+```
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+Once this is done, you should be all set to launch the platform using 
+``` sh
+yarn start api
 
-There are also many [community plugins](https://nx.dev/nx-community) you could add.
+# In another terminal
+yarn start 
+```
 
-## Generate an application
+You will then see that the frontend is not displaying anything, because your Database is empty, you need to run the crons for that.
+I have built some scripts to help fetching data more quickly, namely `fetch-seasons.sh` and `fetch-rounds.sh`.
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+Check that the environment variables match your services urls, and run 
+``` sh
+sh fetch-seasons.sh
+sh fetch-rounds.sh
+```
+After that, the frontend should display data from the last 10 years, and detailled data (including race results) from the last season.
 
-> You can use any of the plugins above to generate applications as well.
+# Project architecture
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+The project is organized as a Monorepo managed by Nx in order to share as much code as possible between the services.
+Nx is really useful because it handles all the boilerplate of configuring the multiple projects and their dependencies. It has allowed me to have a project up and running in a matter of minutes.
 
-## Generate a library
+It is organized as several projects, organized in two groups, `Apps` and `Libs`.
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+## Apps
 
-> You can also use any of the plugins above to generate libraries as well.
+### F1-API
 
-Libraries are sharable across libraries and applications. They can be imported from `@f1-dashboard/mylib`.
+This service is the core of the app, as it encapsulates the Database. It moslty consists of two parts, the `prisma` part, that handles every request from the service to the database, and the `express` part, that handles requests from the outside to the service.
 
-## Development server
+The database architecture is extremely close to the one used by `ergast`, the source of every data that I'm currently using. This allows me to have very little code in the API, because this is not the most interesting part of the project.
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+### F1-dashboard
 
-## Code scaffolding
+F1-dashboard is the frontend of the project, written in `React`, it displays the API's data in a more nice way.
+It uses `redux` along with `redux-toolkit` as Global State Management, and `material-ui` as design library.
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+### Crons
 
-## Build
+Crons are the scripts that run to fetch data from `ergast` API and store it in F1-api.
+They are aimed to be used in a Cloud environment, like `AWS Lambdas` or `Google Cloud Functions`, but can be run locally.
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Libs
 
-## Running unit tests
+Libs are project that are shared between two or more apps in the repository.
+They are useful to keep consistency, and reduce the amount of change needed when updating a common behaviour (following the "Common Closure Principle" as much as I can).
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+### API Clients
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+Api clients are a principle that I believe I have first heard of from Netflix, which tells the API developer to always provide a client to interact with the API. 
+This ensures that updates to the API can be reflected without pain through the whole application.
 
-## Running end-to-end tests
+This allows some nice features:
 
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+- **End to End typing**: if the client using your API is fully typed, then there can not be any discrepency between types in your API, and in the application using it
+- **Reduce code size**: the client handles the authentication, the route names, etc. that can be a real pain for the developer.
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+### API Interfaces
 
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-## ☁ Nx Cloud
-
-### Computation Memoization in the Cloud
-
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+This is where are stored every common interfaces between the services, in order to reduce code duplication.
