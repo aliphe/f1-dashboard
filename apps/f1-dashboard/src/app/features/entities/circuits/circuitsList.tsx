@@ -13,32 +13,28 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import { setLastRequest } from '../../requests/requestsSlice';
 import { sortByString } from '../../../helpers/utils';
 
 const CircuitList: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, circuits, isLastRequested } = useSelector(
-    (state: RootState) => ({
-      isLoading: state.circuits.isLoading,
-      circuits: Object.values(state.circuits.byId),
-      isLastRequested: state.requests.lastRequested === 'circuits',
-    })
-  );
+  const { isLoading, circuits, isLoaded } = useSelector((state: RootState) => ({
+    isLoading: state.circuits.isLoading,
+    isLoaded: state.circuits.isLoaded,
+    circuits: Object.values(state.circuits.byId),
+  }));
 
   useEffect(() => {
-    if (!isLoading && !isLastRequested) {
+    if (!isLoaded && !isLoading) {
       dispatch(fetchCircuits());
-      dispatch(setLastRequest({ lastRequested: 'circuits' }));
     }
-  }, [dispatch, circuits, isLoading, isLastRequested]);
+  }, [dispatch, circuits, isLoading, isLoaded]);
 
   if (isLoading) {
     return <CircularProgress />;
   }
 
   return (
-    <Paper className={'circuits-list'}>
+    <Paper className="circuits-list">
       <Typography variant="h6" component="div">
         Circuits
       </Typography>

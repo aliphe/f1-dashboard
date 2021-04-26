@@ -1,17 +1,16 @@
 import { DriverStanding } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { f1ApiClient } from '../..';
+import FetchableEntity, { defaultFetchableEntity } from '../../fetchableEntity';
 
-export interface DriversStandingsState {
+export interface DriversStandingsState extends FetchableEntity {
   drivers: DriverStanding[];
-
-  isLoading: boolean;
 }
 
 const initialState: DriversStandingsState = {
-  drivers: [],
+  ...defaultFetchableEntity,
 
-  isLoading: false,
+  drivers: [],
 };
 
 export const fetchDriverStandingsByYear = createAsyncThunk(
@@ -27,6 +26,7 @@ const driversStandingsReducer = createSlice({
     builder.addCase(fetchDriverStandingsByYear.fulfilled, (state, action) => {
       state.drivers = action.payload.data.driverStandings;
       state.isLoading = false;
+      state.isLoaded = true;
     });
     builder.addCase(fetchDriverStandingsByYear.pending, (state) => {
       state.drivers = [];
@@ -34,6 +34,7 @@ const driversStandingsReducer = createSlice({
     });
     builder.addCase(fetchDriverStandingsByYear.rejected, (state) => {
       state.isLoading = false;
+      state.isLoaded = true;
     });
   },
 });

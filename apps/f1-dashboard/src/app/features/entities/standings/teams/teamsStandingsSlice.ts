@@ -1,17 +1,18 @@
 import { TeamStanding } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { f1ApiClient } from '../..';
+import FetchableEntity, { defaultFetchableEntity } from '../../fetchableEntity';
 
-export interface TeamsStandingsState {
+export interface TeamsStandingsState extends FetchableEntity {
   teams: TeamStanding[];
 
   isLoading: boolean;
 }
 
 const initialState: TeamsStandingsState = {
-  teams: [],
+  ...defaultFetchableEntity,
 
-  isLoading: false,
+  teams: [],
 };
 
 export const fetchTeamsStandingsByYear = createAsyncThunk(
@@ -27,6 +28,7 @@ const teamsStandingsReducer = createSlice({
     builder.addCase(fetchTeamsStandingsByYear.fulfilled, (state, action) => {
       state.teams = action.payload.data.teamStandings;
       state.isLoading = false;
+      state.isLoaded = true;
     });
     builder.addCase(fetchTeamsStandingsByYear.pending, (state) => {
       state.teams = [];
@@ -34,6 +36,7 @@ const teamsStandingsReducer = createSlice({
     });
     builder.addCase(fetchTeamsStandingsByYear.rejected, (state) => {
       state.isLoading = false;
+      state.isLoaded = true;
     });
   },
 });

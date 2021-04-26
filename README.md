@@ -14,27 +14,31 @@ You will then need a `PostgreSQL` database running (I highly recommend using doc
 and set the environment variables in the API to point to your database url.
 
 You will then need to initialize your database and prisma, by running :
-``` sh
+
+```sh
 yarn db:migrate       # Applies all the migrations to your database
 yarn prisma:generate  # Generates prisma client from your database state
 ```
 
-Once this is done, you should be all set to launch the platform using 
-``` sh
+Once this is done, you should be all set to launch the platform using
+
+```sh
 yarn start api
 
 # In another terminal
-yarn start 
+yarn start
 ```
 
 You will then see that the frontend is not displaying anything, because your Database is empty, you need to run the crons for that.
 I have built some scripts to help fetching data more quickly, namely `fetch-seasons.sh` and `fetch-rounds.sh`.
 
-Check that the environment variables match your services urls, and run 
-``` sh
+Check that the environment variables match your services urls, and run
+
+```sh
 sh fetch-seasons.sh
 sh fetch-rounds.sh
 ```
+
 After that, the frontend should display data from the last 10 years, and detailled data (including race results) from the last season.
 
 # Project architecture
@@ -69,7 +73,7 @@ They are useful to keep consistency, and reduce the amount of change needed when
 
 ### API Clients
 
-Api clients are a principle that I believe I have first heard of from Netflix, which tells the API developer to always provide a client to interact with the API. 
+Api clients are a principle that I believe I have first heard of from Netflix, which tells the API developer to always provide a client to interact with the API.
 This ensures that updates to the API can be reflected without pain through the whole application.
 
 This allows some nice features:

@@ -34,6 +34,7 @@ export interface Race {
 }
 
 export interface RaceResult {
+  round: number;
   points: number;
   position: number;
   grid: number;
@@ -60,4 +61,11 @@ export interface DriverStanding {
 
 export interface Season {
   year: number;
+}
+
+export interface PointSystem {
+  fastestLap: number; // TODO only if top 10, must add it
+  pointsByPosition: {
+    [position: number]: number;
+  };
 }

@@ -13,26 +13,24 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import { setLastRequest } from '../../requests/requestsSlice';
 import { sortByString } from '../../../helpers/utils';
 
 const TeamsList: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, teams, season, isLastRequested } = useSelector(
+  const { isLoading, teams, season, isLoaded } = useSelector(
     (state: RootState) => ({
       isLoading: state.teams.isLoading,
+      isLoaded: state.teams.isLoaded,
       teams: Object.values(state.teams.byId),
       season: state.season.season,
-      isLastRequested: state.requests.lastRequested === 'teams',
     })
   );
 
   useEffect(() => {
-    if (!isLoading && !isLastRequested) {
+    if (!isLoaded && !isLoading) {
       dispatch(fetchTeamsByYear(season));
-      dispatch(setLastRequest({ lastRequested: 'teams' }));
     }
-  }, [dispatch, teams, isLoading, season, isLastRequested]);
+  }, [dispatch, teams, isLoading, season, isLoaded]);
 
   if (isLoading) {
     return <CircularProgress />;

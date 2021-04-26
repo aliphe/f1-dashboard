@@ -17,6 +17,26 @@ export default function createRaceResultsRouter(
   const router = Router({ mergeParams: true });
 
   router.get(
+    '/',
+    AsyncHandler(
+      async (req, res: ExpressResponse<FetchRaceResultsResponse>) => {
+        const { season } = req.params;
+
+        const raceResults = await formulaOneService.fetchRaceResults(
+          Number(season)
+        );
+
+        return res.status(200).json({
+          message: 'Races results fetched successfully',
+          data: {
+            raceResults,
+          },
+        });
+      }
+    )
+  );
+
+  router.get(
     '/:round',
     AsyncHandler(
       async (req, res: ExpressResponse<FetchRaceResultsResponse>) => {

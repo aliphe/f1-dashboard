@@ -13,27 +13,25 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
-import { setLastRequest } from '../../requests/requestsSlice';
 import { sortByString } from '../../../helpers/utils';
 import { driverName, processAge } from '../../../helpers/format';
 
 const DriversList: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, drivers, season, isLastFetched } = useSelector(
+  const { isLoading, drivers, season, isLoaded } = useSelector(
     (state: RootState) => ({
       isLoading: state.drivers.isLoading,
+      isLoaded: state.drivers.isLoaded,
       drivers: Object.values(state.drivers.byId),
       season: state.season.season,
-      isLastFetched: state.requests.lastRequested === 'drivers',
     })
   );
 
   useEffect(() => {
-    if (!isLoading && !isLastFetched) {
+    if (!isLoaded && !isLoading) {
       dispatch(fetchDriversByYear(season));
-      dispatch(setLastRequest({ lastRequested: 'drivers' }));
     }
-  }, [dispatch, drivers, isLoading, season, isLastFetched]);
+  }, [dispatch, drivers, isLoading, season, isLoaded]);
 
   if (isLoading) {
     return <CircularProgress />;

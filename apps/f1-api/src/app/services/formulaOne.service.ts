@@ -98,12 +98,15 @@ export default class FormulaOneService {
     }));
   }
 
-  async fetchRaceResults(season: number, round: number): Promise<RaceResult[]> {
+  async fetchRaceResults(
+    season: number,
+    round?: number
+  ): Promise<RaceResult[]> {
     const raceResults = await this.prisma.raceResult.findMany({
       where: {
         race: {
           seasonYear: season,
-          round: round,
+          round,
         },
       },
       include: {
@@ -114,6 +117,7 @@ export default class FormulaOneService {
 
     return raceResults.map((r) => ({
       ...r,
+      round: r.raceRound,
       driver: {
         ...r.driver,
         dateOfBirth: r.driver.dateOfBirth.toISOString(),
