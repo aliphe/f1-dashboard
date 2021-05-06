@@ -2,7 +2,6 @@ import { createStyles, makeStyles, TextField, Theme } from '@material-ui/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { setLastRequest } from '../requests/requestsSlice';
 import { selectSeason } from './seasonSelectorSlice';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,10 +27,7 @@ const SeasonSelector: React.FC = () => {
       variant="outlined"
       type="number"
       onChange={(e) => {
-        dispatch(
-          selectSeason({ season: (e.target.value as unknown) as number })
-        );
-        dispatch(setLastRequest({ lastRequested: '' }));
+        dispatch(selectSeason({ season: Number(e.target.value) }));
       }}
       value={season}
     />

@@ -70,11 +70,16 @@ export default class F1ApiClient {
     return data;
   }
 
+  /**
+   * @param round if omitted, fetches the whole season's results
+   */
   async fetchRaceResults(
     season: number,
-    round: number
+    round?: number
   ): Promise<ApiTypes.FetchRaceResultsResponse> {
-    const { data } = await this.axios.get(`/races/${season}/results/${round}`);
+    const { data } = await this.axios.get(
+      `/races/${season}/results${round ? `/${round}` : ''}`
+    );
     return data;
   }
 

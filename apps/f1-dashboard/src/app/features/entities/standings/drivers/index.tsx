@@ -1,71 +1,30 @@
 import React, { useEffect } from 'react';
-import { DriverStanding } from '@f1-dashboard/api-interfaces';
-import {
-  CircularProgress,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchDriverStandingsByYear } from './driverStandingsSlice';
 import { RootState } from '../../../../store';
-import { setLastRequest } from '../../../requests/requestsSlice';
-import { sortByNumber } from '../../../../helpers/utils';
-import { driverName } from '../../../../helpers/format';
+import DriverStandingsTable from '../../../../components/entities/standings/drivers';
 
 const DriverStandings: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, drivers, season, isLastRequested } = useSelector(
+  const { isLoading, drivers, season, isLoaded } = useSelector(
     (state: RootState) => ({
       ...state.driversStandings,
       season: state.season.season,
-      isLastRequested: state.requests.lastRequested === 'driversStandings',
     })
   );
 
   useEffect(() => {
-    if (!isLoading && !isLastRequested) {
+    if (!isLoaded && !isLoading) {
       dispatch(fetchDriverStandingsByYear(season));
-      dispatch(setLastRequest({ lastRequested: 'driversStandings' }));
     }
-  }, [dispatch, isLoading, isLastRequested, season]);
+  }, [dispatch, isLoading, season, isLoaded]);
 
   if (isLoading) {
     return <CircularProgress />;
   }
 
-  return (
-    <Paper>
-      <Typography variant="h6" component="div">
-        Drivers
-      </Typography>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Position</TableCell>
-              <TableCell>Driver</TableCell>
-              <TableCell>Points</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortByNumber(drivers, 'position').map((d: DriverStanding) => (
-              <TableRow key={d.position}>
-                <TableCell>{d.position}</TableCell>
-                <TableCell>{driverName(d.driver)}</TableCell>
-                <TableCell>{d.points}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
-  );
+  return <DriverStandingsTable standings={drivers} />;
 };
 
 export default DriverStandings;

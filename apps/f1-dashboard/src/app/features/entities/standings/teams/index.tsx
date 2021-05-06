@@ -14,25 +14,22 @@ import { RootState } from '../../../../store';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeamsStandingsByYear } from './teamsStandingsSlice';
-import { setLastRequest } from '../../../requests/requestsSlice';
 import { sortByNumber } from '../../../../helpers/utils';
 
 const TeamsStandings: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, teams, season, isLastRequested } = useSelector(
+  const { isLoading, teams, season, isLoaded } = useSelector(
     (state: RootState) => ({
       ...state.teamsStandings,
       season: state.season.season,
-      isLastRequested: state.requests.lastRequested === 'teamsStandings',
     })
   );
 
   useEffect(() => {
-    if (!isLoading && !isLastRequested) {
+    if (!isLoaded && !isLoading) {
       dispatch(fetchTeamsStandingsByYear(season));
-      dispatch(setLastRequest({ lastRequested: 'teamsStandings' }));
     }
-  }, [dispatch, isLoading, isLastRequested, season]);
+  }, [dispatch, isLoading, season, isLoaded]);
 
   if (isLoading) {
     return <CircularProgress />;

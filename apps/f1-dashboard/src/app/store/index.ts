@@ -23,9 +23,6 @@ import teamsReducer, {
 import seasonSelectorReducer, {
   SeasonState,
 } from '../features/seasonSelector/seasonSelectorSlice';
-import requestsReducer, {
-  RequestsState,
-} from '../features/requests/requestsSlice';
 import raceResultsReducer, {
   RaceResultsState,
 } from '../features/entities/races/results/raceResultsSlice';
@@ -43,7 +40,6 @@ const store = configureStore({
     raceResults: raceResultsReducer,
     teams: teamsReducer,
     season: seasonSelectorReducer,
-    requests: requestsReducer,
   },
 });
 
@@ -56,7 +52,6 @@ export type RootState = {
   raceResults: RaceResultsState;
   teams: TeamsState;
   season: SeasonState;
-  requests: RequestsState;
 };
 
 export default store;

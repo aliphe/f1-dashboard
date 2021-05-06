@@ -1,21 +1,20 @@
 import { Circuit } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { f1ApiClient } from '..';
+import FetchableEntity, { defaultFetchableEntity } from '../fetchableEntity';
 
-export interface CircuitsState {
+export interface CircuitsState extends FetchableEntity {
   byId: { [circuitId: string]: Circuit };
 
   allIds: string[];
-
-  isLoading: boolean;
 }
 
 const initialState: CircuitsState = {
+  ...defaultFetchableEntity,
+
   byId: {},
 
   allIds: [],
-
-  isLoading: false,
 };
 
 export const fetchCircuits = createAsyncThunk('circuits/fetch', async () =>
@@ -32,6 +31,7 @@ const circuitsReducer = createSlice({
         state.allIds.push(d.id);
         state.byId[d.id] = d;
         state.isLoading = false;
+        state.isLoaded = true;
       });
     });
     builder.addCase(fetchCircuits.pending, (state) => {
@@ -41,6 +41,7 @@ const circuitsReducer = createSlice({
     });
     builder.addCase(fetchCircuits.rejected, (state) => {
       state.isLoading = false;
+      state.isLoaded = true;
     });
   },
 });

@@ -1,17 +1,16 @@
 import { Race } from '@f1-dashboard/api-interfaces';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { f1ApiClient } from '..';
+import FetchableEntity, { defaultFetchableEntity } from '../fetchableEntity';
 
-export interface RacesState {
+export interface RacesState extends FetchableEntity {
   races: Race[];
-
-  isLoading: boolean;
 }
 
 const initialState: RacesState = {
-  races: [],
+  ...defaultFetchableEntity,
 
-  isLoading: false,
+  races: [],
 };
 
 export const fetchRaces = createAsyncThunk(
@@ -33,6 +32,7 @@ const racesReducer = createSlice({
     builder.addCase(fetchRaces.fulfilled, (state, action) => {
       state.races = action.payload.data.races;
       state.isLoading = false;
+      state.isLoaded = true;
     });
     builder.addCase(fetchRaces.pending, (state) => {
       state.races = [];
@@ -40,6 +40,7 @@ const racesReducer = createSlice({
     });
     builder.addCase(fetchRaces.rejected, (state) => {
       state.isLoading = false;
+      state.isLoaded = true;
     });
 
     // builder.addCase(fetchRaceResult.fulfilled, (state, action) => {
